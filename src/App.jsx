@@ -429,15 +429,16 @@ export default function Home() {
 
         .photo-frame {
           position: relative;
-          width: 550px;
-          height: 565px;
+          width: min(85vw, 550px);
+          aspect-ratio: 550 / 565;
+          margin: 0 auto;
         }
         .orbit-ring {
           position: absolute;
-          top: 36px;
-          left: 29px;
-          width: 460px;
-          height: 460px;
+          top: 6.37%;
+          left: 5.27%;
+          width: 83.64%;
+          height: 81.42%;
           border-radius: 50%;
           border: 1.5px dashed rgba(79,142,247,0.35);
           opacity: 0;
@@ -451,15 +452,15 @@ export default function Home() {
         }
         .orbit-badge {
           position: absolute;
-          width: 48px;
-          height: 48px;
+          width: clamp(40px, 9vw, 48px);
+          height: clamp(40px, 9vw, 48px);
           border-radius: 50%;
           background: #14141f;
           border: 1px solid rgba(255,255,255,0.1);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 20px;
+          font-size: clamp(16px, 4vw, 20px);
           color: white;
           opacity: 0;
           transform: translate(-50%, -50%) scale(0.5);
@@ -481,6 +482,20 @@ export default function Home() {
         .orbit-badge:nth-of-type(2) { transition-delay: 0.1s; }
         .orbit-badge:nth-of-type(3) { transition-delay: 0.15s; }
         .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
+
+        /* Below desktop, there's no hover to reveal the ring/badges, so keep
+           them permanently visible and tappable instead of hidden. */
+        @media (max-width: 1023px) {
+          .orbit-ring {
+            opacity: 1;
+            transform: scale(1);
+          }
+          .orbit-badge {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+          }
+        }
 
         /* --- Projects section --- */
         .project-card {
@@ -619,7 +634,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative min-h-screen flex flex-row items-center px-8 md:px-20 overflow-hidden pt-24"
+        className="relative min-h-screen flex flex-col lg:flex-row items-center px-8 md:px-20 overflow-hidden pt-24 pb-16 lg:pb-0"
       >
         <div className="relative z-10 flex-1 max-w-2xl">
           <div className="flex items-center gap-2 mb-6">
@@ -673,7 +688,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 hidden lg:flex flex-1 justify-center items-center">
+        <div className="relative z-10 flex flex-1 justify-center items-center mt-16 lg:mt-0">
           <div
             className="photo-frame"
             onMouseEnter={() => setIsHovering(true)}
@@ -686,7 +701,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "30px", left: "219px" }}
+              style={{ top: "5.31%", left: "39.82%" }}
               aria-label="GitHub"
             >
               <FaGithub />
@@ -696,7 +711,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "165px", left: "467px" }}
+              style={{ top: "29.2%", left: "84.91%" }}
               aria-label="LinkedIn"
             >
               <FaLinkedin />
@@ -704,7 +719,7 @@ export default function Home() {
             <a
               href="mailto:youremail@example.com"
               className="orbit-badge"
-              style={{ top: "484px", left: "356px" }}
+              style={{ top: "85.66%", left: "64.73%" }}
               aria-label="Email"
             >
               <FaEnvelope />
@@ -714,17 +729,18 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "287px", left: "30px" }}
+              style={{ top: "50.8%", left: "5.45%" }}
               aria-label="Download Resume"
             >
               <FaFileDownload />
             </a>
 
             <div
-              className="absolute flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
+              className="absolute flex flex-col items-center rounded-3xl overflow-hidden"
               style={{
-                top: "66px",
-                left: "109px",
+                top: "11.68%",
+                left: "19.82%",
+                width: "54.55%",
                 background: isHovering ? "transparent" : "rgba(255,255,255,0.03)",
                 border: isHovering ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
                 backdropFilter: isHovering ? "none" : "blur(20px)",
