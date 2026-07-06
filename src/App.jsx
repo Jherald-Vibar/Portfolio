@@ -45,6 +45,8 @@ function GameTypewriter({ text, speed = 150 }) {
 // gracefully if there are more entries than icons.
 const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
+const GITHUB_USERNAME = "Jherald-Vibar";
+
 function ExperienceStep({ exp, stepLevel, order, isLast }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -283,6 +285,16 @@ export default function Home() {
         .orbit-badge:nth-of-type(3) { transition-delay: 0.15s; }
         .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
 
+        /* --- Projects section --- */
+        .project-card {
+          transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .project-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(79,142,247,0.28);
+          box-shadow: 0 16px 36px -16px rgba(79,142,247,0.3);
+        }
+
         /* --- Experience section --- */
         .exp-card {
           transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
@@ -505,6 +517,129 @@ export default function Home() {
                   }}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="projects"
+        className="relative px-8 md:px-20 py-20"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+            Projects
+          </h2>
+          <p className="text-white/40 text-sm mb-10">
+            A few things I've built, end to end.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-16">
+            {PROJECTS.map((project, i) => {
+              const title = project.title ?? project.name ?? `Project ${i + 1}`;
+              const description = project.description ?? project.desc ?? "";
+              const tech = project.tech ?? project.stack ?? project.tags ?? [];
+              const liveUrl = project.link ?? project.demo ?? project.url ?? null;
+              const repoUrl = project.github ?? project.repo ?? project.source ?? null;
+
+              return (
+                <div
+                  key={title}
+                  className="project-card glass rounded-2xl overflow-hidden flex flex-col"
+                >
+                  {project.image && (
+                    <div className="w-full h-40 overflow-hidden">
+                      <img
+                        src={project.image}
+                        alt={title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3
+                      className="text-white text-lg font-semibold mb-2"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                      {title}
+                    </h3>
+                    {description && (
+                      <p className="text-white/45 text-sm leading-relaxed mb-4 flex-1">
+                        {description}
+                      </p>
+                    )}
+                    {tech.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {tech.map((t) => (
+                          <span key={t} className="tag">{t}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex gap-4 mt-auto pt-1">
+                      {liveUrl && (
+                        <a
+                          href={liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#7eb8ff] text-sm font-medium hover:text-white transition-colors"
+                        >
+                          Live demo →
+                        </a>
+                      )}
+                      {repoUrl && (
+                        <a
+                          href={repoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 text-white/50 text-sm font-medium hover:text-white transition-colors"
+                        >
+                          <FaGithub /> Code
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* GitHub activity — contribution graph + profile link */}
+          <div className="glass rounded-2xl px-6 py-8 md:px-10 md:py-10">
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
+                  <FaGithub style={{ color: "#7eb8ff", fontSize: "18px" }} />
+                </span>
+                <div>
+                  <h3
+                    className="text-white text-base font-semibold"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    GitHub Activity
+                  </h3>
+                  <p className="text-white/40 text-xs">@{GITHUB_USERNAME}</p>
+                </div>
+              </div>
+              <a
+                href={`https://github.com/${GITHUB_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 whitespace-nowrap"
+                style={{
+                  background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
+                  boxShadow: "0 0 20px rgba(79,142,247,0.28)",
+                }}
+              >
+                View GitHub Profile
+              </a>
+            </div>
+
+            <div className="w-full overflow-x-auto rounded-xl bg-white/[0.02] border border-white/[0.06] p-4">
+              <img
+                src={`https://ghchart.rshah.org/4f8ef7/${GITHUB_USERNAME}`}
+                alt={`${GITHUB_USERNAME}'s GitHub contribution graph`}
+                className="w-full min-w-[640px]"
+              />
             </div>
           </div>
         </div>
