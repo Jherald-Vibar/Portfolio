@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { SKILLS, PROJECTS } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
@@ -41,21 +41,19 @@ function GameTypewriter({ text, speed = 150 }) {
 export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const heroRef = useRef(null);
 
+  // Track mouse across the ENTIRE window, not just one section,
+  // so the glow layer (which is fixed to the viewport) works everywhere.
   useEffect(() => {
     const handleMove = (e) => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setMouse({ x: e.clientX, y: e.clientY });
     };
-    const el = heroRef.current;
-    el?.addEventListener("mousemove", handleMove);
-    return () => el?.removeEventListener("mousemove", handleMove);
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#09090f] text-white font-sans">
+    <div className="relative min-h-screen bg-[#09090f] text-white font-sans">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
         * { font-family: 'Inter', sans-serif; }
@@ -124,7 +122,6 @@ export default function Home() {
           transform: translate(-50%, -50%);
           transition: left 0.08s ease, top 0.08s ease;
           animation: hueShift 12s ease-in-out infinite;
-          z-index: 0;
         }
         .orb-1 { animation: hueShift 14s ease-in-out infinite; }
         .orb-2 { animation: hueShift 18s ease-in-out infinite reverse; }
@@ -142,8 +139,6 @@ export default function Home() {
           margin-right: 8px;
         }
 
-        /* Outer hit-area now fully encloses the photo AND all 4 badges,
-           so moving the cursor between them never leaves a hoverable element. */
         .photo-frame {
           position: relative;
           width: 550px;
@@ -200,6 +195,28 @@ export default function Home() {
         .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
       `}</style>
 
+      {/* Fixed ambient background: covers the whole viewport, sits behind
+          every section (z-index -1), and stays put while you scroll, so
+          the glow/orbs are visible on every part of the homepage. */}
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        style={{ zIndex: -1 }}
+      >
+        <div className="cursor-glow" style={{ left: mouse.x, top: mouse.y }} />
+        <div
+          className="orb-1 absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.10]"
+          style={{ background: "radial-gradient(circle, #4f8ef7 0%, transparent 60%)", filter: "blur(100px)" }}
+        />
+        <div
+          className="orb-2 absolute bottom-1/3 left-1/5 w-[380px] h-[380px] rounded-full opacity-[0.08]"
+          style={{ background: "radial-gradient(circle, #f472b6 0%, transparent 60%)", filter: "blur(90px)" }}
+        />
+        <div
+          className="orb-3 absolute top-2/3 right-1/3 w-[340px] h-[340px] rounded-full opacity-[0.08]"
+          style={{ background: "radial-gradient(circle, #34d399 0%, transparent 60%)", filter: "blur(90px)" }}
+        />
+      </div>
+
       <nav
         className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 py-5"
         style={{
@@ -220,25 +237,8 @@ export default function Home() {
 
       <section
         id="about"
-        ref={heroRef}
         className="relative min-h-screen flex flex-row items-center px-8 md:px-20 overflow-hidden pt-24"
-        style={{ background: "linear-gradient(160deg, #09090f 0%, #0d0d1a 100%)" }}
       >
-        <div className="cursor-glow" style={{ left: mouse.x, top: mouse.y }} />
-
-        <div
-          className="orb-1 absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.10] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #4f8ef7 0%, transparent 60%)", filter: "blur(100px)" }}
-        />
-        <div
-          className="orb-2 absolute bottom-1/3 left-1/5 w-[380px] h-[380px] rounded-full opacity-[0.08] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #f472b6 0%, transparent 60%)", filter: "blur(90px)" }}
-        />
-        <div
-          className="orb-3 absolute top-2/3 right-1/3 w-[340px] h-[340px] rounded-full opacity-[0.08] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #34d399 0%, transparent 60%)", filter: "blur(90px)" }}
-        />
-
         <div className="relative z-10 flex-1 max-w-2xl">
           <div className="flex items-center gap-2 mb-6">
             <span
@@ -382,17 +382,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div
-          className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, #09090f)" }}
-        />
       </section>
 
       <section
         id="skills"
         className="relative px-8 md:px-20 py-28"
-        style={{ background: "#09090f" }}
       >
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 mb-3">
