@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
+import Profile2 from './assets/images/profile2.jpg';
 
 function GameTypewriter({ text, speed = 150 }) {
   const [count, setCount] = useState(0);
@@ -38,6 +39,7 @@ function GameTypewriter({ text, speed = 150 }) {
 
 export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -240,20 +242,36 @@ export default function Home() {
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
             }}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
           >
             <div className="w-full h-100 overflow-hidden relative">
               <img
                 src={Profile}
                 alt="Jherald D. Vibar"
-                className="w-full h-full object-cover object-top"
-                style={{ boxShadow: "0 0 40px rgba(79,142,247,0.35)" }}
+                className="w-full h-full object-cover object-top absolute inset-0"
+                style={{
+                  boxShadow: "0 0 40px rgba(79,142,247,0.35)",
+                  opacity: isHovering ? 0 : 1,
+                  transition: "opacity 0.4s ease",
+                }}
+              />
+              <img
+                src={Profile2}
+                alt="Jherald D. Vibar alternate"
+                className="w-full h-full object-cover object-top absolute inset-0"
+                style={{
+                  boxShadow: "0 0 40px rgba(79,142,247,0.35)",
+                  opacity: isHovering ? 1 : 0,
+                  transition: "opacity 0.4s ease",
+                }}
               />
               <div
-                className="absolute bottom-0 inset-x-0 h-16 pointer-events-none"
+                className="absolute bottom-0 inset-x-0 h-16 pointer-events-none z-10"
                 style={{ background: "linear-gradient(to bottom, transparent, rgba(9,9,15,0.85))" }}
               />
             </div>
-            </div>
+          </div>
         </div>
 
         <div
