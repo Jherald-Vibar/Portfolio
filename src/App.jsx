@@ -43,8 +43,6 @@ function GameTypewriter({ text, speed = 150 }) {
   );
 }
 
-// Cycles a small, meaningful icon set across experience entries. Falls back
-// gracefully if there are more entries than icons.
 const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
 const GITHUB_USERNAME = "Jherald-Vibar";
@@ -174,7 +172,7 @@ function ProjectRow({ project, onOpen }) {
       <div className="project-row-scrim absolute inset-0" />
 
       <div className="relative z-10 flex items-center gap-5 px-6 py-5">
-        <div className="project-row-thumb shrink-0 rounded-xl overflow-hidden border border-white/10">
+        <div className="project-row-thumb shrink-0 w-16 h-16 rounded-xl overflow-hidden border border-white/10">
           <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
         </div>
 
@@ -539,6 +537,60 @@ export default function Home() {
           height: 10px;
           border-radius: 2px;
           display: inline-block;
+        }
+
+        /* --- Project rows (hover-reveal cover + summary) --- */
+        .project-row {
+          position: relative;
+          transition: border-color 0.3s ease;
+        }
+        .project-row:hover {
+          border-color: rgba(79,142,247,0.28);
+        }
+        .project-row-bg {
+          opacity: 0;
+          transform: scale(1.05);
+          transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .project-row:hover .project-row-bg {
+          opacity: 0.35;
+          transform: scale(1);
+        }
+        .project-row-scrim {
+          background: linear-gradient(90deg, rgba(9,9,15,0.95) 0%, rgba(9,9,15,0.8) 55%, rgba(9,9,15,0.45) 100%);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+        .project-row:hover .project-row-scrim {
+          opacity: 1;
+        }
+        .project-row-thumb {
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .project-row:hover .project-row-thumb {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        .project-row-summary {
+          transition: opacity 0.3s ease;
+        }
+        .project-row-tech {
+          opacity: 0;
+          transform: translateY(4px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .project-row:hover .project-row-tech {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .project-row-cta {
+          opacity: 0;
+          transform: translateX(-6px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .project-row:hover .project-row-cta {
+          opacity: 1;
+          transform: translateX(0);
         }
 
         /* --- Experience section --- */
