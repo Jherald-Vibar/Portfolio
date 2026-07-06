@@ -113,10 +113,12 @@ export default function Home() {
           height: 600px;
           border-radius: 50%;
           background: radial-gradient(circle,
-            rgba(79,142,247,0.15) 0%,
-            rgba(167,139,250,0.12) 40%,
-            rgba(244,114,182,0.08) 65%,
-            transparent 75%
+            rgba(79,142,247,0.14) 0%,
+            rgba(123,140,250,0.10) 25%,
+            rgba(167,139,250,0.07) 45%,
+            rgba(206,127,216,0.04) 60%,
+            rgba(244,114,182,0.02) 75%,
+            transparent 100%
           );
           transform: translate(-50%, -50%);
           transition: left 0.08s ease, top 0.08s ease;
@@ -168,15 +170,15 @@ export default function Home() {
 
         <div
           className="orb-1 absolute top-1/4 right-1/4 w-[380px] h-[380px] rounded-full opacity-[0.06] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #4f8ef7 0%, transparent 70%)", filter: "blur(40px)" }}
+          style={{ background: "radial-gradient(circle, #4f8ef7 0%, rgba(79,142,247,0.4) 35%, rgba(79,142,247,0.1) 60%, transparent 100%)", filter: "blur(40px)" }}
         />
         <div
           className="orb-2 absolute bottom-1/3 left-1/5 w-[260px] h-[260px] rounded-full opacity-[0.04] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #f472b6 0%, transparent 70%)", filter: "blur(30px)" }}
+          style={{ background: "radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0.4) 35%, rgba(244,114,182,0.1) 60%, transparent 100%)", filter: "blur(30px)" }}
         />
         <div
           className="orb-3 absolute top-2/3 right-1/3 w-[220px] h-[220px] rounded-full opacity-[0.05] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #34d399 0%, transparent 70%)", filter: "blur(35px)" }}
+          style={{ background: "radial-gradient(circle, #34d399 0%, rgba(52,211,153,0.4) 35%, rgba(52,211,153,0.1) 60%, transparent 100%)", filter: "blur(35px)" }}
         />
 
         <div className="relative z-10 flex-1 max-w-2xl">
