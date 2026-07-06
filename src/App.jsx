@@ -300,7 +300,7 @@ export default function Home() {
             <div className="orbit-ring" />
 
             <a
-              href="https://github.com/your-username"
+              href="https://github.com/Jherald-Vibar"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -310,7 +310,7 @@ export default function Home() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/your-username"
+              href="https://linkedin.com/in/jherald-vibar"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -320,7 +320,7 @@ export default function Home() {
               <FaLinkedin />
             </a>
             <a
-              href="mailto:youremail@example.com"
+              href="mailto:vibar_jherald@spcc.edu.ph"
               className="orbit-badge"
               style={{ top: "484px", left: "356px" }}
               aria-label="Email"
