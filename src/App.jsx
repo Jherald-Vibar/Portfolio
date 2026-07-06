@@ -310,7 +310,7 @@ export default function Home() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/jherald-vibar"
+              href="https://linkedin.com/in/jherald-vibar-319741285"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
