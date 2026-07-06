@@ -45,10 +45,10 @@ function GameTypewriter({ text, speed = 150 }) {
 // gracefully if there are more entries than icons.
 const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
-function ExperienceStep({ exp, index, isLast }) {
+function ExperienceStep({ exp, stepLevel, order, isLast }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
-  const Icon = EXP_ICONS[index % EXP_ICONS.length];
+  const Icon = EXP_ICONS[stepLevel % EXP_ICONS.length];
 
   useEffect(() => {
     const node = ref.current;
@@ -71,10 +71,10 @@ function ExperienceStep({ exp, index, isLast }) {
       ref={ref}
       className="exp-row relative flex items-start gap-6"
       style={{
-        marginLeft: `${index * 40}px`,
+        marginLeft: `${stepLevel * 40}px`,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(18px)",
-        transition: `opacity 0.6s ease ${index * 0.08}s, transform 0.6s ease ${index * 0.08}s`,
+        transition: `opacity 0.6s ease ${order * 0.08}s, transform 0.6s ease ${order * 0.08}s`,
       }}
     >
       {/* connecting rail */}
@@ -559,14 +559,22 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col">
-            {EXPERIENCE.map((exp, i) => (
-              <ExperienceStep
-                key={exp.year}
-                exp={exp}
-                index={i}
-                isLast={i === EXPERIENCE.length - 1}
-              />
-            ))}
+            {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
+              // EXPERIENCE is stored oldest → newest. We display newest → oldest
+              // (present at the top), but the staircase indent should still climb
+              // toward the present, so the step level is the original chronological
+              // index, not the display index.
+              const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
+              return (
+                <ExperienceStep
+                  key={exp.year}
+                  exp={exp}
+                  stepLevel={chronoIndex}
+                  order={displayIndex}
+                  isLast={displayIndex === arr.length - 1}
+                />
+              );
+            })}
           </div>
         </div>
       </section>
