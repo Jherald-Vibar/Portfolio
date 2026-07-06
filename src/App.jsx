@@ -354,7 +354,6 @@ export default function Home() {
                   alt="Jherald D. Vibar alternate"
                   className="w-full h-full object-cover object-top absolute inset-0"
                   style={{
-                    boxShadow: "0 0 40px rgba(79,142,247,0.35)",
                     opacity: isHovering ? 1 : 0,
                     transition: "opacity 0.4s ease",
                   }}
