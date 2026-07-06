@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
-import Profile2 from './assets/images/profile2.jpg';
+import Profile2 from './assets/images/profile2.png';
 import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload } from 'react-icons/fa';
 
 function GameTypewriter({ text, speed = 150 }) {
