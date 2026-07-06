@@ -49,3 +49,32 @@ export const PROJECTS = [
     tags: ["Flutter", "Dart"],
   },
 ];
+
+
+export const EXPERIENCE = [
+  {
+    year: 2022,
+    role: "Developer",
+    note: "Developer at ITSA Organization at School, also doing Freelance Projects."
+  },
+  {
+    year: 2023,
+    role: "Head Developer at ITSA Org",
+    note: "Creating a attendance and voting system for our school.",
+  },
+  {
+    year: 2024, 
+    role: "Assistance Developer",
+    note: "Maintaining and updating the system for our school."
+  }, 
+  {
+    year: 2025, 
+    role: "Full Stack Dev/Database Dev at LISAI as INTERN",
+    note: "Creating A Web, and make their legacy system much more faster by making the access query as pass through so that the formula and most select queries will do in server.",
+  },
+  {
+    year: 2026,
+    role: "MS Access Dev/Database Dev at LISAI as Part Time",
+    note: "Fixing all the bugs in the system and make it much more faster."
+  }
+]
