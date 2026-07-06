@@ -330,10 +330,11 @@ export default function Home() {
             <div
               className="relative flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
+                background: isHovering ? "transparent" : "rgba(255,255,255,0.03)",
+                border: isHovering ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: isHovering ? "none" : "blur(20px)",
+                WebkitBackdropFilter: isHovering ? "none" : "blur(20px)",
+                transition: "background 0.4s ease, border-color 0.4s ease",
               }}
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
@@ -360,7 +361,11 @@ export default function Home() {
                 />
                 <div
                   className="absolute bottom-0 inset-x-0 h-16 pointer-events-none z-10"
-                  style={{ background: "linear-gradient(to bottom, transparent, rgba(9,9,15,0.85))" }}
+                  style={{
+                    background: "linear-gradient(to bottom, transparent, rgba(9,9,15,0.85))",
+                    opacity: isHovering ? 0 : 1,
+                    transition: "opacity 0.4s ease",
+                  }}
                 />
               </div>
             </div>
