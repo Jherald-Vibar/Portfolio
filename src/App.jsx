@@ -53,7 +53,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#09090f] text-white font-sans">
+    <div className="relative isolate min-h-screen bg-[#09090f] text-white font-sans">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
         * { font-family: 'Inter', sans-serif; }
