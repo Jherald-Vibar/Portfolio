@@ -85,15 +85,12 @@ export default function Home() {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.03em;
         }
-        .skill-chip {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.09);
-          transition: all 0.2s ease;
+        .tech-row {
+          transition: padding-left 0.2s ease, background 0.2s ease;
         }
-        .skill-chip:hover {
-          background: rgba(79, 142, 247, 0.1);
-          border-color: rgba(79, 142, 247, 0.3);
-          transform: translateY(-2px);
+        .tech-row:hover {
+          padding-left: 8px;
+          background: rgba(255,255,255,0.015);
         }
         .nav-link {
           color: rgba(255,255,255,0.5);
@@ -386,44 +383,62 @@ export default function Home() {
 
       <section
         id="skills"
-        className="relative px-8 md:px-20 py-28"
+        className="relative px-8 md:px-20 py-32"
       >
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="accent-dot" />
-            <span
-              className="text-[#4f8ef7] text-sm tracking-[0.15em] uppercase font-medium"
-              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-            >
-              Tech Stack
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-end justify-between mb-14 border-b border-white/10 pb-6">
+            <div>
+              <span
+                className="text-white/35 text-xs tracking-[0.2em] uppercase font-medium block mb-3"
+                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+              >
+                02 — Capabilities
+              </span>
+              <h2 className="display text-3xl md:text-4xl font-bold text-white">
+                Tech Stack
+              </h2>
+            </div>
+            <span className="text-white/30 text-sm hidden md:block">
+              {String(SKILLS.length).padStart(2, "0")} technologies
             </span>
           </div>
 
-          <h2 className="display text-3xl md:text-4xl font-bold mb-4 text-white">
-            Programming Languages & Tools
-          </h2>
-          <p className="text-white/40 mb-12 max-w-xl">
-            Technologies I work with regularly, from database engineering to web and mobile development.
-          </p>
-
-          <div className="flex flex-wrap gap-3">
+          <div>
             {SKILLS.map((skill, i) => {
               const Icon = skill.icon;
               return (
-                <span
+                <div
                   key={skill.label ?? i}
-                  className="skill-chip px-5 py-2.5 rounded-xl text-sm text-white/80 font-medium flex items-center gap-2"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  className="tech-row group flex items-center gap-6 py-5 border-b border-white/[0.06]"
                 >
-                  {Icon && <Icon style={{ color: skill.color, fontSize: "16px" }} />}
-                  {skill.label}
-                </span>
+                  <span className="text-white/25 text-sm font-mono w-8 shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.08] shrink-0 transition-colors duration-200 group-hover:border-white/20">
+                    {Icon && <Icon style={{ color: skill.color, fontSize: "18px" }} />}
+                  </span>
+
+                  <span
+                    className="text-white/85 text-lg font-medium flex-1"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {skill.label}
+                  </span>
+
+                  <span className="text-white/25 text-xs uppercase tracking-wider hidden sm:block">
+                    {skill.category || ""}
+                  </span>
+
+                  <span className="text-white/20 transition-all duration-200 group-hover:text-[#4f8ef7] group-hover:translate-x-1">
+                    →
+                  </span>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
