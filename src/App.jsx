@@ -100,17 +100,33 @@ export default function Home() {
           transition: color 0.2s;
         }
         .nav-link:hover { color: rgba(255,255,255,0.95); }
+
+        @keyframes hueShift {
+          0%   { filter: hue-rotate(0deg); }
+          50%  { filter: hue-rotate(180deg); }
+          100% { filter: hue-rotate(360deg); }
+        }
         .cursor-glow {
           pointer-events: none;
           position: absolute;
           width: 600px;
           height: 600px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(79,142,247,0.13) 0%, transparent 70%);
+          background: radial-gradient(circle,
+            rgba(79,142,247,0.15) 0%,
+            rgba(167,139,250,0.12) 40%,
+            rgba(244,114,182,0.08) 65%,
+            transparent 75%
+          );
           transform: translate(-50%, -50%);
           transition: left 0.08s ease, top 0.08s ease;
+          animation: hueShift 12s ease-in-out infinite;
           z-index: 0;
         }
+        .orb-1 { animation: hueShift 14s ease-in-out infinite; }
+        .orb-2 { animation: hueShift 18s ease-in-out infinite reverse; }
+        .orb-3 { animation: hueShift 16s ease-in-out infinite; }
+
         .section-divider {
           border: none;
           border-top: 1px solid rgba(255,255,255,0.06);
@@ -151,12 +167,16 @@ export default function Home() {
         <div className="cursor-glow" style={{ left: mouse.x, top: mouse.y }} />
 
         <div
-          className="absolute top-1/4 right-1/4 w-[380px] h-[380px] rounded-full opacity-[0.06] pointer-events-none"
+          className="orb-1 absolute top-1/4 right-1/4 w-[380px] h-[380px] rounded-full opacity-[0.06] pointer-events-none"
           style={{ background: "radial-gradient(circle, #4f8ef7 0%, transparent 70%)", filter: "blur(40px)" }}
         />
         <div
-          className="absolute bottom-1/3 left-1/5 w-[260px] h-[260px] rounded-full opacity-[0.04] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 70%)", filter: "blur(30px)" }}
+          className="orb-2 absolute bottom-1/3 left-1/5 w-[260px] h-[260px] rounded-full opacity-[0.04] pointer-events-none"
+          style={{ background: "radial-gradient(circle, #f472b6 0%, transparent 70%)", filter: "blur(30px)" }}
+        />
+        <div
+          className="orb-3 absolute top-2/3 right-1/3 w-[220px] h-[220px] rounded-full opacity-[0.05] pointer-events-none"
+          style={{ background: "radial-gradient(circle, #34d399 0%, transparent 70%)", filter: "blur(35px)" }}
         />
 
         <div className="relative z-10 flex-1 max-w-2xl">
@@ -241,11 +261,6 @@ export default function Home() {
           style={{ background: "linear-gradient(to bottom, transparent, #09090f)" }}
         />
       </section>
-
-      
-
-      
-
       <Footer />
     </div>
   );
