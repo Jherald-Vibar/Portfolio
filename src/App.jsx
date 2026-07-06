@@ -85,12 +85,13 @@ export default function Home() {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.03em;
         }
-        .tech-row {
-          transition: padding-left 0.2s ease, background 0.2s ease;
+        .tech-card {
+          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
         }
-        .tech-row:hover {
-          padding-left: 8px;
-          background: rgba(255,255,255,0.015);
+        .tech-card:hover {
+          background: rgba(255,255,255,0.04);
+          border-color: rgba(255,255,255,0.12);
+          transform: translateY(-2px);
         }
         .nav-link {
           color: rgba(255,255,255,0.5);
@@ -383,55 +384,32 @@ export default function Home() {
 
       <section
         id="skills"
-        className="relative px-8 md:px-20 py-32"
+        className="relative px-8 md:px-20 py-20"
       >
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-end justify-between mb-14 border-b border-white/10 pb-6">
-            <div>
-              <span
-                className="text-white/35 text-xs tracking-[0.2em] uppercase font-medium block mb-3"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                02 — Capabilities
-              </span>
-              <h2 className="display text-3xl md:text-4xl font-bold text-white">
-                Tech Stack
-              </h2>
-            </div>
-            <span className="text-white/30 text-sm hidden md:block">
-              {String(SKILLS.length).padStart(2, "0")} technologies
-            </span>
-          </div>
+          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+            Tech Stack
+          </h2>
+          <p className="text-white/40 text-sm mb-10">
+            Tools and languages I use to build databases, web, and mobile systems.
+          </p>
 
-          <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {SKILLS.map((skill, i) => {
               const Icon = skill.icon;
               return (
                 <div
                   key={skill.label ?? i}
-                  className="tech-row group flex items-center gap-6 py-5 border-b border-white/[0.06]"
+                  className="tech-card flex flex-col items-center justify-center gap-3 py-6 px-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]"
                 >
-                  <span className="text-white/25 text-sm font-mono w-8 shrink-0">
-                    {String(i + 1).padStart(2, "0")}
+                  <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-white/[0.04]">
+                    {Icon && <Icon style={{ color: skill.color, fontSize: "20px" }} />}
                   </span>
-
-                  <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.08] shrink-0 transition-colors duration-200 group-hover:border-white/20">
-                    {Icon && <Icon style={{ color: skill.color, fontSize: "18px" }} />}
-                  </span>
-
                   <span
-                    className="text-white/85 text-lg font-medium flex-1"
+                    className="text-white/75 text-sm font-medium text-center"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     {skill.label}
-                  </span>
-
-                  <span className="text-white/25 text-xs uppercase tracking-wider hidden sm:block">
-                    {skill.category || ""}
-                  </span>
-
-                  <span className="text-white/20 transition-all duration-200 group-hover:text-[#4f8ef7] group-hover:translate-x-1">
-                    →
                   </span>
                 </div>
               );
@@ -439,6 +417,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <Footer />
     </div>
   );
