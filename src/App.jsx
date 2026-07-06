@@ -486,10 +486,6 @@ export default function Home() {
         /* Below desktop, there's no hover to reveal the ring/badges, so keep
            them permanently visible and tappable instead of hidden. */
         @media (max-width: 1023px) {
-          .orbit-ring {
-            opacity: 1;
-            transform: scale(1);
-          }
           .orbit-badge {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
