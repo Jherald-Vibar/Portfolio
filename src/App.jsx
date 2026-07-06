@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
-import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload } from 'react-icons/fa';
+import {
+  FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
+  FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
+} from 'react-icons/fa';
 
 function GameTypewriter({ text, speed = 150 }) {
   const [count, setCount] = useState(0);
@@ -35,6 +38,94 @@ function GameTypewriter({ text, speed = 150 }) {
         <span style={{ opacity: blink ? 1 : 0, transition: "opacity 0.1s" }}>_</span>
       )}
     </span>
+  );
+}
+
+// Cycles a small, meaningful icon set across experience entries. Falls back
+// gracefully if there are more entries than icons.
+const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
+
+function ExperienceStep({ exp, index, isLast }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const Icon = EXP_ICONS[index % EXP_ICONS.length];
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="exp-row relative flex items-start gap-6"
+      style={{
+        marginLeft: `${index * 40}px`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(18px)",
+        transition: `opacity 0.6s ease ${index * 0.08}s, transform 0.6s ease ${index * 0.08}s`,
+      }}
+    >
+      {/* connecting rail */}
+      {!isLast && (
+        <span
+          className="absolute left-[27px] top-[56px] w-[2px]"
+          style={{
+            height: "calc(100% + 24px)",
+            background: "linear-gradient(to bottom, rgba(79,142,247,0.35), rgba(79,142,247,0.02))",
+          }}
+        />
+      )}
+
+      {/* node */}
+      <div
+        className="exp-node relative flex items-center justify-center shrink-0"
+        style={{
+          width: "56px",
+          height: "56px",
+          borderRadius: "16px",
+          background: "linear-gradient(155deg, rgba(79,142,247,0.16), rgba(79,142,247,0.03))",
+          border: "1px solid rgba(79,142,247,0.28)",
+          boxShadow: visible ? "0 0 0 4px rgba(79,142,247,0.06), 0 8px 24px -8px rgba(79,142,247,0.35)" : "none",
+        }}
+      >
+        <Icon style={{ color: "#7eb8ff", fontSize: "18px" }} />
+        <span className="exp-pulse" />
+      </div>
+
+      {/* card */}
+      <div className="exp-card glass flex-1 rounded-2xl px-6 py-5 mb-8">
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <h3
+            className="text-white text-lg font-semibold"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {exp.role}
+          </h3>
+          <span
+            className="tag"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {exp.year}
+          </span>
+        </div>
+        <p className="text-[#7eb8ff]/80 text-sm font-medium mb-1.5">{exp.org}</p>
+        {exp.note && (
+          <p className="text-white/40 text-sm leading-relaxed max-w-lg">{exp.note}</p>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -191,6 +282,43 @@ export default function Home() {
         .orbit-badge:nth-of-type(2) { transition-delay: 0.1s; }
         .orbit-badge:nth-of-type(3) { transition-delay: 0.15s; }
         .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
+
+        /* --- Experience section --- */
+        .exp-card {
+          transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+        .exp-row:hover .exp-card {
+          transform: translateY(-3px);
+          border-color: rgba(79,142,247,0.3);
+          box-shadow: 0 14px 32px -14px rgba(79,142,247,0.28);
+        }
+        .exp-node {
+          transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+        .exp-row:hover .exp-node {
+          transform: scale(1.06);
+          border-color: rgba(79,142,247,0.55);
+        }
+        .exp-pulse {
+          position: absolute;
+          inset: -6px;
+          border-radius: 20px;
+          border: 1px solid rgba(79,142,247,0.4);
+          opacity: 0;
+          animation: expPulse 2.8s ease-out infinite;
+        }
+        @keyframes expPulse {
+          0%   { opacity: 0.5; transform: scale(0.85); }
+          70%  { opacity: 0; transform: scale(1.25); }
+          100% { opacity: 0; transform: scale(1.25); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .exp-pulse { animation: none; opacity: 0; }
+          .exp-row { transition: none !important; opacity: 1 !important; transform: none !important; }
+        }
+        @media (max-width: 768px) {
+          .exp-row { margin-left: 0 !important; }
+        }
       `}</style>
 
       {/* Fixed ambient background: covers the whole viewport, sits behind
@@ -432,33 +560,12 @@ export default function Home() {
 
           <div className="flex flex-col">
             {EXPERIENCE.map((exp, i) => (
-              <div
+              <ExperienceStep
                 key={exp.year}
-                className="exp-step relative pl-6 pb-10 last:pb-0"
-                style={{ marginLeft: `${i * 44}px` }}
-              >
-                {/* tick + connecting line */}
-                <span className="absolute left-0 top-1.5 w-4 h-[2px] bg-white/25 exp-tick" />
-                {i < EXPERIENCE.length - 1 && (
-                  <span className="absolute left-0 top-2 bottom-0 w-[1.5px] bg-white/10" />
-                )}
-
-                <span
-                  className="text-white/35 text-xs font-mono uppercase tracking-wider block mb-1.5"
-                >
-                  {exp.year}
-                </span>
-                <h3
-                  className="text-white text-lg font-semibold mb-1"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                >
-                  {exp.role}
-                </h3>
-                <p className="text-white/45 text-sm">{exp.org}</p>
-                {exp.note && (
-                  <p className="text-white/30 text-sm mt-1 max-w-md">{exp.note}</p>
-                )}
-              </div>
+                exp={exp}
+                index={i}
+                isLast={i === EXPERIENCE.length - 1}
+              />
             ))}
           </div>
         </div>
