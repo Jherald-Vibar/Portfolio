@@ -7,7 +7,7 @@ import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
 import {
   FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
-  FaTimes, FaChevronLeft, FaChevronRight, FaUserTie,
+  FaTimes, FaPlus, FaHashtag, FaExternalLinkAlt,
 } from 'react-icons/fa';
 
 function GameTypewriter({ text, speed = 150 }) {
@@ -43,8 +43,6 @@ function GameTypewriter({ text, speed = 150 }) {
   );
 }
 
-// Cycles a small, meaningful icon set across experience entries. Falls back
-// gracefully if there are more entries than icons.
 const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
 const GITHUB_USERNAME = "Jherald-Vibar";
@@ -143,214 +141,188 @@ function normalizeProject(project, i) {
 
   return {
     title: project.title ?? project.name ?? `Project ${i + 1}`,
+    year: project.year ?? project.date ?? "",
     summary: project.summary ?? project.description ?? project.desc ?? "",
     fullDescription:
       project.fullDescription ?? project.description ?? project.desc ?? "",
-    role: project.role ?? project.myRole ?? "",
+    role: project.role ?? project.myRole ?? "Full Stack Developer",
     tech: project.tech ?? project.stack ?? project.tags ?? [],
     images,
     liveUrl: project.link ?? project.demo ?? project.url ?? null,
     repoUrl: project.github ?? project.repo ?? project.source ?? null,
+    // Optional highlight stat (e.g. { value: "396", label: "hours OJT completed" }).
+    // Omitted gracefully if a project doesn't define one.
+    stat: project.stat ?? null,
   };
 }
 
-// A compact box that expands to fill the full row width on hover, revealing
-// its cover image and a short summary. Click opens the full project modal.
-function ProjectRow({ project, onOpen }) {
+// Editorial accordion row, styled like a case-study index: collapsed it's a
+// thin bordered line with title/year on the left and tags + a "+" on the
+// right; expanded it reveals a three-column case-study layout (stat sidebar,
+// description, tags/year/thumbnail) in place, pushing the rows below it down.
+function ProjectRow({ project, isOpen, onToggle }) {
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="project-row group relative w-full text-left rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.02]"
-    >
-      <div
-        className="project-row-bg absolute inset-0"
-        style={{
-          backgroundImage: `url(${project.images[0]})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div className="project-row-scrim absolute inset-0" />
-
-      <div className="relative z-10 flex items-center gap-5 px-6 py-5">
-        <div className="project-row-thumb shrink-0 rounded-xl overflow-hidden border border-white/10">
-          <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <h3
-            className="text-white text-base md:text-lg font-semibold truncate"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
-            {project.title}
-          </h3>
-          <p className="project-row-summary text-white/45 text-sm mt-1 line-clamp-1">
-            {project.summary}
-          </p>
-          <div className="project-row-tech flex flex-wrap gap-2 mt-3">
-            {project.tech.slice(0, 5).map((t) => (
-              <span key={t} className="tag">{t}</span>
-            ))}
-          </div>
-        </div>
-
-        <span className="project-row-cta shrink-0 text-sm font-medium text-[#7eb8ff] whitespace-nowrap">
-          View project →
-        </span>
-      </div>
-    </button>
-  );
-}
-
-// Full-screen overlay: image carousel, full description, role, and tech stack.
-function ProjectModal({ project, onClose }) {
-  const [index, setIndex] = useState(0);
-  const images = project.images;
-
-  const next = () => setIndex((i) => (i + 1) % images.length);
-  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") next();
-      if (e.key === "ArrowLeft") prev();
-    };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images.length]);
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(5,5,9,0.85)", backdropFilter: "blur(6px)" }}
-      onClick={onClose}
-    >
-      <div
-        className="modal-panel glass relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl"
-        onClick={(e) => e.stopPropagation()}
+    <div className="proj-row-wrap border-b" style={{ borderColor: "#d9d3c6" }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        className="proj-row-header w-full flex items-center justify-between gap-6 py-6 text-left"
+        aria-expanded={isOpen}
       >
-        <button
-          type="button"
-          onClick={onClose}
-          className="modal-close absolute top-4 right-4 z-20 w-9 h-9 rounded-full flex items-center justify-center"
-          aria-label="Close"
-        >
-          <FaTimes />
-        </button>
-
-        {/* Carousel */}
-        <div className="relative w-full h-64 md:h-80 bg-black/30">
-          <img
-            src={images[index]}
-            alt={`${project.title} screenshot ${index + 1}`}
-            className="w-full h-full object-cover"
-          />
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={prev}
-                className="carousel-arrow absolute left-3 top-1/2 -translate-y-1/2"
-                aria-label="Previous image"
-              >
-                <FaChevronLeft />
-              </button>
-              <button
-                type="button"
-                onClick={next}
-                className="carousel-arrow absolute right-3 top-1/2 -translate-y-1/2"
-                aria-label="Next image"
-              >
-                <FaChevronRight />
-              </button>
-              <div className="absolute bottom-3 inset-x-0 flex justify-center gap-1.5">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setIndex(i)}
-                    className="carousel-dot"
-                    style={{ opacity: i === index ? 1 : 0.35 }}
-                    aria-label={`Go to image ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="p-6 md:p-8">
+        <div className="flex items-baseline gap-4 min-w-0">
           <h3
-            className="text-white text-xl md:text-2xl font-bold mb-3"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            className="proj-title text-xl md:text-2xl font-bold tracking-tight truncate"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
           >
             {project.title}
           </h3>
-
-          {project.fullDescription && (
-            <p className="text-white/55 text-sm leading-relaxed mb-5">
-              {project.fullDescription}
-            </p>
+          {project.year && (
+            <span className="text-sm shrink-0" style={{ color: "#9a927f" }}>
+              {project.year}
+            </span>
           )}
+        </div>
 
-          {project.role && (
-            <div className="flex items-start gap-3 mb-5">
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] shrink-0">
-                <FaUserTie style={{ color: "#7eb8ff", fontSize: "13px" }} />
-              </span>
-              <div>
-                <p className="text-white/85 text-sm font-medium">My Role</p>
-                <p className="text-white/45 text-sm">{project.role}</p>
-              </div>
-            </div>
-          )}
+        <div className="flex items-center gap-6 shrink-0">
+          <span
+            className="hidden sm:block text-xs uppercase tracking-wide"
+            style={{ color: "#9a927f", fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {project.tech.join(" · ")}
+          </span>
+          <span
+            className="proj-toggle flex items-center justify-center w-6 h-6 shrink-0"
+            style={{ color: isOpen ? "#c1440e" : "#1a1712" }}
+          >
+            {isOpen ? <FaTimes size={15} /> : <FaPlus size={13} />}
+          </span>
+        </div>
+      </button>
 
-          {project.tech.length > 0 && (
-            <div className="mb-6">
-              <p className="text-white/85 text-sm font-medium mb-2">Tech Stack</p>
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map((t) => (
-                  <span key={t} className="tag">{t}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex gap-4">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-xl text-sm font-medium text-white"
+      {isOpen && (
+        <div className="proj-row-body pb-10 md:pb-14">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-10">
+            {/* Sidebar: vertical label, headline stat, role */}
+            <div className="flex md:flex-col gap-5 md:gap-6 md:w-32 shrink-0">
+              <span
+                className="flex items-center justify-center shrink-0"
                 style={{
-                  background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
-                  boxShadow: "0 0 20px rgba(79,142,247,0.28)",
+                  width: "36px",
+                  height: "104px",
+                  background: "#c1440e",
+                  color: "#f4ede1",
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                  fontSize: "11px",
+                  letterSpacing: "0.12em",
+                  fontWeight: 600,
+                  fontFamily: "'Space Grotesk', sans-serif",
                 }}
               >
-                Live demo
-              </a>
-            )}
-            {project.repoUrl && (
-              <a
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass px-5 py-2.5 rounded-xl text-sm font-medium text-white/70 hover:text-white flex items-center gap-2"
+                PROJECT
+              </span>
+
+              <div className="flex flex-col justify-center">
+                {project.stat && (
+                  <>
+                    <span
+                      className="text-4xl md:text-5xl font-bold leading-none"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+                    >
+                      {project.stat.value}
+                    </span>
+                    <span className="text-xs mt-2" style={{ color: "#9a927f" }}>
+                      {project.stat.label}
+                    </span>
+                    <div className="w-full border-t my-4" style={{ borderColor: "#d9d3c6" }} />
+                  </>
+                )}
+                {project.role && (
+                  <span
+                    className="text-[11px] font-semibold uppercase tracking-wide"
+                    style={{ color: "#1a1712", fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {project.role}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Main copy */}
+            <div className="flex-1 min-w-0">
+              <h4
+                className="text-3xl md:text-5xl font-bold leading-tight mb-5"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
               >
-                <FaGithub /> Code
-              </a>
-            )}
+                {project.title}
+              </h4>
+              {project.summary && (
+                <p className="text-lg md:text-xl leading-snug mb-4" style={{ color: "#1a1712" }}>
+                  {project.summary}
+                </p>
+              )}
+              {project.fullDescription && project.fullDescription !== project.summary && (
+                <p className="text-base leading-relaxed" style={{ color: "#9a927f" }}>
+                  {project.fullDescription}
+                </p>
+              )}
+            </div>
+
+            {/* Right rail: tags, year, links, thumbnail */}
+            <div className="md:w-64 shrink-0 flex flex-col gap-6">
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="px-3 py-1.5 text-xs font-medium border rounded-md"
+                    style={{ borderColor: "#c9c2b3", color: "#1a1712" }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {project.year && (
+                <div>
+                  <p className="text-[11px] uppercase tracking-wide mb-1" style={{ color: "#9a927f" }}>
+                    Year
+                  </p>
+                  <p
+                    className="text-2xl font-bold"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+                  >
+                    {project.year}
+                  </p>
+                </div>
+              )}
+
+              {(project.liveUrl || project.repoUrl) && (
+                <div className="flex items-center gap-3" style={{ color: "#9a927f" }}>
+                  <FaHashtag size={13} />
+                  <a
+                    href={project.liveUrl ?? project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open project link"
+                    className="hover:opacity-70"
+                    style={{ color: "#9a927f" }}
+                  >
+                    <FaExternalLinkAlt size={13} />
+                  </a>
+                </div>
+              )}
+
+              <div className="rounded-lg overflow-hidden border" style={{ borderColor: "#d9d3c6" }}>
+                <img
+                  src={project.images[0]}
+                  alt={project.title}
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -358,7 +330,7 @@ function ProjectModal({ project, onClose }) {
 export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [activeProject, setActiveProject] = useState(null);
+  const [openProjectIndex, setOpenProjectIndex] = useState(null);
 
   // Track mouse across the ENTIRE window, not just one section,
   // so the glow layer (which is fixed to the viewport) works everywhere.
@@ -511,134 +483,13 @@ export default function Home() {
         .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
 
         /* --- Projects section --- */
-        .project-row {
-          cursor: pointer;
-          height: 92px;
-          transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-                      border-color 0.3s ease,
-                      box-shadow 0.3s ease;
+        .project-card {
+          transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .project-row:hover,
-        .project-row:focus-visible {
-          height: 220px;
-          border-color: rgba(79,142,247,0.35);
-          box-shadow: 0 20px 48px -18px rgba(79,142,247,0.35);
-          outline: none;
-        }
-        .project-row-bg {
-          opacity: 0;
-          transform: scale(1.06);
-          transition: opacity 0.45s ease, transform 0.6s ease;
-        }
-        .project-row:hover .project-row-bg,
-        .project-row:focus-visible .project-row-bg {
-          opacity: 1;
-          transform: scale(1);
-        }
-        .project-row-scrim {
-          background: linear-gradient(90deg, rgba(9,9,15,0.97) 0%, rgba(9,9,15,0.9) 45%, rgba(9,9,15,0.55) 100%);
-          transition: background 0.4s ease;
-        }
-        .project-row:hover .project-row-scrim,
-        .project-row:focus-visible .project-row-scrim {
-          background: linear-gradient(90deg, rgba(9,9,15,0.92) 0%, rgba(9,9,15,0.72) 45%, rgba(9,9,15,0.35) 100%);
-        }
-        .project-row-thumb {
-          width: 56px;
-          height: 56px;
-          transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .project-row:hover .project-row-thumb,
-        .project-row:focus-visible .project-row-thumb {
-          width: 150px;
-          height: 150px;
-        }
-        .project-row-summary {
-          opacity: 0.75;
-          transition: opacity 0.3s ease;
-        }
-        .project-row-tech {
-          max-height: 0;
-          opacity: 0;
-          overflow: hidden;
-          transition: max-height 0.4s ease, opacity 0.35s ease;
-        }
-        .project-row:hover .project-row-tech,
-        .project-row:focus-visible .project-row-tech {
-          max-height: 60px;
-          opacity: 1;
-        }
-        .project-row-cta {
-          opacity: 0;
-          transform: translateX(-6px);
-          transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .project-row:hover .project-row-cta,
-        .project-row:focus-visible .project-row-cta {
-          opacity: 1;
-          transform: translateX(0);
-        }
-        .line-clamp-1 {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        @media (max-width: 768px) {
-          .project-row { height: auto; padding: 4px 0; }
-          .project-row-bg, .project-row-scrim { display: none; }
-          .project-row-thumb { width: 64px !important; height: 64px !important; }
-          .project-row-tech, .project-row-cta { max-height: none; opacity: 1; transform: none; }
-        }
-
-        /* --- Project modal --- */
-        @keyframes modalIn {
-          from { opacity: 0; transform: translateY(16px) scale(0.98); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .modal-panel {
-          animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .modal-close {
-          background: rgba(9,9,15,0.6);
-          border: 1px solid rgba(255,255,255,0.12);
-          color: rgba(255,255,255,0.7);
-          transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-        }
-        .modal-close:hover {
-          background: rgba(79,142,247,0.16);
-          border-color: rgba(79,142,247,0.4);
-          color: #fff;
-          transform: rotate(90deg);
-        }
-        .carousel-arrow {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(9,9,15,0.55);
-          border: 1px solid rgba(255,255,255,0.14);
-          color: #fff;
-          backdrop-filter: blur(6px);
-          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-        }
-        .carousel-arrow:hover {
-          background: rgba(79,142,247,0.25);
-          border-color: rgba(79,142,247,0.45);
-          transform: translateY(-50%) scale(1.08);
-        }
-        .carousel-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #fff;
-          border: none;
-          transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .carousel-dot:hover {
-          transform: scale(1.3);
+        .project-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(79,142,247,0.28);
+          box-shadow: 0 16px 36px -16px rgba(79,142,247,0.3);
         }
         .github-panel {
           background: rgba(255,255,255,0.02);
@@ -660,6 +511,32 @@ export default function Home() {
           height: 10px;
           border-radius: 2px;
           display: inline-block;
+        }
+
+        /* --- Project accordion (editorial case-study index) --- */
+        .proj-panel {
+          background: #f4ede1;
+        }
+        .proj-row-header {
+          cursor: pointer;
+          background: transparent;
+          border: none;
+        }
+        .proj-row-header:hover .proj-title {
+          opacity: 0.7;
+        }
+        .proj-title {
+          transition: opacity 0.2s ease;
+        }
+        .proj-toggle {
+          transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .proj-row-body {
+          animation: projExpand 0.25s ease;
+        }
+        @keyframes projExpand {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
         /* --- Experience section --- */
@@ -969,25 +846,20 @@ export default function Home() {
             A few things I've built, end to end.
           </p>
 
-          <div className="flex flex-col gap-4 mb-16">
+          <div className="proj-panel rounded-2xl px-6 md:px-10 mb-16 border-t" style={{ borderColor: "#d9d3c6" }}>
             {PROJECTS.map((project, i) => {
               const normalized = normalizeProject(project, i);
+              const isOpen = openProjectIndex === i;
               return (
                 <ProjectRow
                   key={normalized.title}
                   project={normalized}
-                  onOpen={() => setActiveProject(normalized)}
+                  isOpen={isOpen}
+                  onToggle={() => setOpenProjectIndex(isOpen ? null : i)}
                 />
               );
             })}
           </div>
-
-          {activeProject && (
-            <ProjectModal
-              project={activeProject}
-              onClose={() => setActiveProject(null)}
-            />
-          )}
 
           {/* GitHub activity — simple, professional, GitHub-green contribution graph */}
           <div className="github-panel rounded-2xl px-6 py-6 md:px-8 md:py-7">
