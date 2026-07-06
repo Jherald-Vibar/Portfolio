@@ -3,6 +3,7 @@ import { SKILLS, PROJECTS } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.jpg';
+import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload } from 'react-icons/fa';
 
 function GameTypewriter({ text, speed = 150 }) {
   const [count, setCount] = useState(0);
@@ -140,6 +141,56 @@ export default function Home() {
           display: inline-block;
           margin-right: 8px;
         }
+
+        .photo-frame {
+          position: relative;
+        }
+        .orbit-ring {
+          position: absolute;
+          inset: -34px;
+          border-radius: 50%;
+          border: 1.5px dashed rgba(79,142,247,0.35);
+          opacity: 0;
+          transform: scale(0.9);
+          transition: opacity 0.4s ease, transform 0.4s ease;
+          pointer-events: none;
+        }
+        .photo-frame:hover .orbit-ring {
+          opacity: 1;
+          transform: scale(1);
+        }
+        .orbit-badge {
+          position: absolute;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #14141f;
+          border: 1px solid rgba(255,255,255,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          color: white;
+          opacity: 0;
+          transform: scale(0.5);
+          transition: opacity 0.35s ease, transform 0.35s ease, background 0.2s ease, border-color 0.2s ease;
+          pointer-events: none;
+          z-index: 20;
+        }
+        .photo-frame:hover .orbit-badge {
+          opacity: 1;
+          transform: scale(1);
+          pointer-events: auto;
+        }
+        .orbit-badge:hover {
+          background: rgba(79,142,247,0.15);
+          border-color: rgba(79,142,247,0.4);
+          transform: scale(1.12);
+        }
+        .orbit-badge:nth-of-type(1) { transition-delay: 0.05s; }
+        .orbit-badge:nth-of-type(2) { transition-delay: 0.1s; }
+        .orbit-badge:nth-of-type(3) { transition-delay: 0.15s; }
+        .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
       `}</style>
 
       <nav
@@ -234,42 +285,85 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 hidden lg:flex flex-1 justify-center items-center">
-          <div
-            className="relative flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-            }}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-          >
-            <div className="w-full h-100 overflow-hidden relative">
-              <img
-                src={Profile}
-                alt="Jherald D. Vibar"
-                className="w-full h-full object-cover object-top absolute inset-0"
-                style={{
-                  boxShadow: "0 0 40px rgba(79,142,247,0.35)",
-                  opacity: isHovering ? 0 : 1,
-                  transition: "opacity 0.4s ease",
-                }}
-              />
-              <img
-                src={Profile2}
-                alt="Jherald D. Vibar alternate"
-                className="w-full h-full object-cover object-top absolute inset-0"
-                style={{
-                  boxShadow: "0 0 40px rgba(79,142,247,0.35)",
-                  opacity: isHovering ? 1 : 0,
-                  transition: "opacity 0.4s ease",
-                }}
-              />
-              <div
-                className="absolute bottom-0 inset-x-0 h-16 pointer-events-none z-10"
-                style={{ background: "linear-gradient(to bottom, transparent, rgba(9,9,15,0.85))" }}
-              />
+          <div className="photo-frame">
+            <div className="orbit-ring" />
+
+            <a
+              href="https://github.com/your-username"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="orbit-badge"
+              style={{ top: "-24px", left: "50%", marginLeft: "-24px" }}
+              aria-label="GitHub"
+            >
+              <FaGithub />
+            </a>
+            <a
+              href="https://linkedin.com/in/your-username"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="orbit-badge"
+              style={{ top: "50%", right: "-24px", marginTop: "-24px" }}
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin />
+            </a>
+            <a
+              href="mailto:youremail@example.com"
+              className="orbit-badge"
+              style={{ bottom: "-24px", left: "50%", marginLeft: "-24px" }}
+              aria-label="Email"
+            >
+              <FaEnvelope />
+            </a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="orbit-badge"
+              style={{ top: "50%", left: "-24px", marginTop: "-24px" }}
+              aria-label="Download Resume"
+            >
+              <FaFileDownload />
+            </a>
+
+            <div
+              className="relative flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
+              <div className="w-full h-100 overflow-hidden relative">
+                <img
+                  src={Profile}
+                  alt="Jherald D. Vibar"
+                  className="w-full h-full object-cover object-top absolute inset-0"
+                  style={{
+                    boxShadow: "0 0 40px rgba(79,142,247,0.35)",
+                    opacity: isHovering ? 0 : 1,
+                    transition: "opacity 0.4s ease",
+                  }}
+                />
+                <img
+                  src={Profile2}
+                  alt="Jherald D. Vibar alternate"
+                  className="w-full h-full object-cover object-top absolute inset-0"
+                  style={{
+                    boxShadow: "0 0 40px rgba(79,142,247,0.35)",
+                    opacity: isHovering ? 1 : 0,
+                    transition: "opacity 0.4s ease",
+                  }}
+                />
+                <div
+                  className="absolute bottom-0 inset-x-0 h-16 pointer-events-none z-10"
+                  style={{ background: "linear-gradient(to bottom, transparent, rgba(9,9,15,0.85))" }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -279,6 +373,47 @@ export default function Home() {
           style={{ background: "linear-gradient(to bottom, transparent, #09090f)" }}
         />
       </section>
+
+      <section
+        id="skills"
+        className="relative px-8 md:px-20 py-28"
+        style={{ background: "#09090f" }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="accent-dot" />
+            <span
+              className="text-[#4f8ef7] text-sm tracking-[0.15em] uppercase font-medium"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              Tech Stack
+            </span>
+          </div>
+
+          <h2 className="display text-3xl md:text-4xl font-bold mb-4 text-white">
+            Programming Languages & Tools
+          </h2>
+          <p className="text-white/40 mb-12 max-w-xl">
+            Technologies I work with regularly, from database engineering to web and mobile development.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            {SKILLS.map((skill, i) => {
+              const label = typeof skill === "string" ? skill : skill.name;
+              return (
+                <span
+                  key={label ?? i}
+                  className="skill-chip px-5 py-2.5 rounded-xl text-sm text-white/80 font-medium"
+                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                >
+                  {label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
