@@ -294,6 +294,27 @@ export default function Home() {
           border-color: rgba(79,142,247,0.28);
           box-shadow: 0 16px 36px -16px rgba(79,142,247,0.3);
         }
+        .github-panel {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.07);
+        }
+        .github-link-btn {
+          color: rgba(255,255,255,0.6);
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.02);
+          transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+        .github-link-btn:hover {
+          color: #fff;
+          border-color: rgba(57,211,83,0.4);
+          background: rgba(57,211,83,0.08);
+        }
+        .legend-swatch {
+          width: 10px;
+          height: 10px;
+          border-radius: 2px;
+          display: inline-block;
+        }
 
         /* --- Experience section --- */
         .exp-card {
@@ -367,7 +388,7 @@ export default function Home() {
           Jhe<span className="text-[#4f8ef7]">.</span>dev
         </span>
         <div className="flex gap-8">
-          {["About", "Projects", "Skills", "Contact"].map((l) => (
+          {["About", "Skills", "Experience", "Projects", "Contact"].map((l) => (
             <a key={l} href={`#${l.toLowerCase()}`} className="nav-link">{l}</a>
           ))}
         </div>
@@ -523,6 +544,74 @@ export default function Home() {
       </section>
 
       <section
+        id="skills"
+        className="relative px-8 md:px-20 py-20"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+            Tech Stack
+          </h2>
+          <p className="text-white/40 text-sm mb-10">
+            Tools and languages I use to build databases, web, and mobile systems.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {SKILLS.map((skill, i) => {
+              const Icon = skill.icon;
+              return (
+                <div
+                  key={skill.label ?? i}
+                  className="tech-card flex flex-col items-center justify-center gap-3 py-6 px-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]"
+                >
+                  <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-white/[0.04]">
+                    {Icon && <Icon style={{ color: skill.color, fontSize: "20px" }} />}
+                  </span>
+                  <span
+                    className="text-white/75 text-sm font-medium text-center"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {skill.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="experience"
+        className="relative px-8 md:px-20 py-20"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+            Experience
+          </h2>
+          <p className="text-white/40 text-sm mb-14">
+            A path that started in college and kept climbing.
+          </p>
+
+          <div className="flex flex-col">
+            {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
+              // EXPERIENCE is stored oldest → newest. We display newest → oldest
+              // (present at the top), but the staircase indent should still climb
+              // toward the present, so the step level is the original chronological
+              // index, not the display index.
+              const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
+              return (
+                <ExperienceStep
+                  key={exp.year}
+                  exp={exp}
+                  stepLevel={chronoIndex}
+                  order={displayIndex}
+                  isLast={displayIndex === arr.length - 1}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </section>
+      <section
         id="projects"
         className="relative px-8 md:px-20 py-20"
       >
@@ -603,113 +692,49 @@ export default function Home() {
             })}
           </div>
 
-          {/* GitHub activity — contribution graph + profile link */}
-          <div className="glass rounded-2xl px-6 py-8 md:px-10 md:py-10">
-            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+          {/* GitHub activity — simple, professional, GitHub-green contribution graph */}
+          <div className="github-panel rounded-2xl px-6 py-6 md:px-8 md:py-7">
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-5 pb-5 border-b border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
-                  <FaGithub style={{ color: "#7eb8ff", fontSize: "18px" }} />
+                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08]">
+                  <FaGithub style={{ color: "rgba(255,255,255,0.7)", fontSize: "16px" }} />
                 </span>
                 <div>
                   <h3
-                    className="text-white text-base font-semibold"
+                    className="text-white/85 text-sm font-semibold"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     GitHub Activity
                   </h3>
-                  <p className="text-white/40 text-xs">@{GITHUB_USERNAME}</p>
+                  <p className="text-white/35 text-xs">@{GITHUB_USERNAME}</p>
                 </div>
               </div>
               <a
                 href={`https://github.com/${GITHUB_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 whitespace-nowrap"
-                style={{
-                  background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
-                  boxShadow: "0 0 20px rgba(79,142,247,0.28)",
-                }}
+                className="github-link-btn px-4 py-2 rounded-lg text-xs font-medium whitespace-nowrap"
               >
-                View GitHub Profile
+                View Profile →
               </a>
             </div>
 
-            <div className="w-full overflow-x-auto rounded-xl bg-white/[0.02] border border-white/[0.06] p-4">
+            <div className="w-full overflow-x-auto">
               <img
-                src={`https://ghchart.rshah.org/4f8ef7/${GITHUB_USERNAME}`}
+                src={`https://ghchart.rshah.org/39d353/${GITHUB_USERNAME}`}
                 alt={`${GITHUB_USERNAME}'s GitHub contribution graph`}
-                className="w-full min-w-[640px]"
+                className="w-full min-w-[640px] opacity-90"
               />
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section
-        id="skills"
-        className="relative px-8 md:px-20 py-20"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
-            Tech Stack
-          </h2>
-          <p className="text-white/40 text-sm mb-10">
-            Tools and languages I use to build databases, web, and mobile systems.
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {SKILLS.map((skill, i) => {
-              const Icon = skill.icon;
-              return (
-                <div
-                  key={skill.label ?? i}
-                  className="tech-card flex flex-col items-center justify-center gap-3 py-6 px-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]"
-                >
-                  <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-white/[0.04]">
-                    {Icon && <Icon style={{ color: skill.color, fontSize: "20px" }} />}
-                  </span>
-                  <span
-                    className="text-white/75 text-sm font-medium text-center"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                  >
-                    {skill.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="experience"
-        className="relative px-8 md:px-20 py-20"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
-            Experience
-          </h2>
-          <p className="text-white/40 text-sm mb-14">
-            A path that started in college and kept climbing.
-          </p>
-
-          <div className="flex flex-col">
-            {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
-              // EXPERIENCE is stored oldest → newest. We display newest → oldest
-              // (present at the top), but the staircase indent should still climb
-              // toward the present, so the step level is the original chronological
-              // index, not the display index.
-              const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
-              return (
-                <ExperienceStep
-                  key={exp.year}
-                  exp={exp}
-                  stepLevel={chronoIndex}
-                  order={displayIndex}
-                  isLast={displayIndex === arr.length - 1}
-                />
-              );
-            })}
+            <div className="flex items-center justify-end gap-1.5 mt-3 text-white/30 text-[11px]">
+              <span>Less</span>
+              <span className="legend-swatch" style={{ background: "rgba(255,255,255,0.06)" }} />
+              <span className="legend-swatch" style={{ background: "rgba(57,211,83,0.3)" }} />
+              <span className="legend-swatch" style={{ background: "rgba(57,211,83,0.6)" }} />
+              <span className="legend-swatch" style={{ background: "#39d353" }} />
+              <span>More</span>
+            </div>
           </div>
         </div>
       </section>
