@@ -24,7 +24,6 @@ export const SKILLS = [
   { label: "VBA / Access", icon: FaMicrosoft, color: "#A4373A" },
   { label: "Docker", icon: SiDocker, color: "#2496ED" },
   { label: "PHP", icon: SiPhp, color: "#777BB4" },
-  { label: "Dart", icon: SiDart, color: "#0175C2" },
 ];
 
 export const PROJECTS = [
