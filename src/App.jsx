@@ -109,17 +109,15 @@ export default function Home() {
         .cursor-glow {
           pointer-events: none;
           position: absolute;
-          width: 600px;
-          height: 600px;
+          width: 700px;
+          height: 700px;
           border-radius: 50%;
           background: radial-gradient(circle,
-            rgba(79,142,247,0.14) 0%,
-            rgba(123,140,250,0.10) 25%,
-            rgba(167,139,250,0.07) 45%,
-            rgba(206,127,216,0.04) 60%,
-            rgba(244,114,182,0.02) 75%,
-            transparent 100%
+            rgba(79,142,247,0.12) 0%,
+            rgba(167,139,250,0.06) 40%,
+            transparent 65%
           );
+          filter: blur(20px);
           transform: translate(-50%, -50%);
           transition: left 0.08s ease, top 0.08s ease;
           animation: hueShift 12s ease-in-out infinite;
@@ -169,16 +167,16 @@ export default function Home() {
         <div className="cursor-glow" style={{ left: mouse.x, top: mouse.y }} />
 
         <div
-          className="orb-1 absolute top-1/4 right-1/4 w-[380px] h-[380px] rounded-full opacity-[0.06] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #4f8ef7 0%, rgba(79,142,247,0.4) 35%, rgba(79,142,247,0.1) 60%, transparent 100%)", filter: "blur(40px)" }}
+          className="orb-1 absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.10] pointer-events-none"
+          style={{ background: "radial-gradient(circle, #4f8ef7 0%, transparent 60%)", filter: "blur(100px)" }}
         />
         <div
-          className="orb-2 absolute bottom-1/3 left-1/5 w-[260px] h-[260px] rounded-full opacity-[0.04] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0.4) 35%, rgba(244,114,182,0.1) 60%, transparent 100%)", filter: "blur(30px)" }}
+          className="orb-2 absolute bottom-1/3 left-1/5 w-[380px] h-[380px] rounded-full opacity-[0.08] pointer-events-none"
+          style={{ background: "radial-gradient(circle, #f472b6 0%, transparent 60%)", filter: "blur(90px)" }}
         />
         <div
-          className="orb-3 absolute top-2/3 right-1/3 w-[220px] h-[220px] rounded-full opacity-[0.05] pointer-events-none"
-          style={{ background: "radial-gradient(circle, #34d399 0%, rgba(52,211,153,0.4) 35%, rgba(52,211,153,0.1) 60%, transparent 100%)", filter: "blur(35px)" }}
+          className="orb-3 absolute top-2/3 right-1/3 w-[340px] h-[340px] rounded-full opacity-[0.08] pointer-events-none"
+          style={{ background: "radial-gradient(circle, #34d399 0%, transparent 60%)", filter: "blur(90px)" }}
         />
 
         <div className="relative z-10 flex-1 max-w-2xl">
