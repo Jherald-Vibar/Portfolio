@@ -694,7 +694,14 @@ export default function Home() {
           <div
             className={`photo-frame ${tapRevealed ? "is-active" : ""}`}
             onClick={() => setTapRevealed((v) => !v)}
-            onMouseEnter={() => setIsHovering(true)}
+            onMouseEnter={() => {
+              // Touch devices fire a phantom mouseenter on tap but never a
+              // matching mouseleave, which would otherwise get the photo
+              // stuck on the alternate image forever. Only real hover-capable
+              // pointers (a mouse) should trigger the crossfade.
+              if (typeof window !== "undefined" && window.matchMedia && !window.matchMedia("(hover: hover)").matches) return;
+              setIsHovering(true);
+            }}
             onMouseLeave={() => setIsHovering(false)}
           >
             <div className="orbit-ring" />
@@ -923,6 +930,70 @@ export default function Home() {
               <span className="legend-swatch" style={{ background: "#39d353" }} />
               <span>More</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="contact"
+        className="relative px-8 md:px-20 py-28"
+      >
+        <div className="max-w-3xl mx-auto text-center">
+          <span
+            className="text-[#4f8ef7] text-sm tracking-[0.15em] uppercase font-medium"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            Get in touch
+          </span>
+
+          <h2 className="display glow-text text-4xl md:text-6xl font-bold leading-tight mt-4 mb-6">
+            Let's build something
+          </h2>
+
+          <p className="text-white/50 text-lg max-w-xl mx-auto leading-relaxed mb-10">
+            Open to full-stack, database, and mobile development opportunities.
+            Send a message and I'll get back to you.
+          </p>
+
+          <a
+            href="mailto:youremail@example.com"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-medium text-base md:text-lg mb-12 transition-transform duration-200 hover:-translate-y-0.5"
+            style={{
+              background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
+              boxShadow: "0 0 30px rgba(79,142,247,0.3)",
+            }}
+          >
+            <FaEnvelope /> youremail@example.com
+          </a>
+
+          <div className="flex items-center justify-center gap-4">
+            <a
+              href="https://github.com/your-username"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="glass w-14 h-14 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <FaGithub size={20} />
+            </a>
+            <a
+              href="https://linkedin.com/in/your-username"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="glass w-14 h-14 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <FaLinkedin size={20} />
+            </a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download Resume"
+              className="glass w-14 h-14 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <FaFileDownload size={18} />
+            </a>
           </div>
         </div>
       </section>
