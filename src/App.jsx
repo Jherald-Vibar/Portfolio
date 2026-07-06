@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SKILLS, PROJECTS } from './constant/data.js';
+import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
@@ -414,6 +414,52 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="experience"
+        className="relative px-8 md:px-20 py-20"
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+            Experience
+          </h2>
+          <p className="text-white/40 text-sm mb-14">
+            A path that started in college and kept climbing.
+          </p>
+
+          <div className="flex flex-col">
+            {EXPERIENCE.map((exp, i) => (
+              <div
+                key={exp.year}
+                className="exp-step relative pl-6 pb-10 last:pb-0"
+                style={{ marginLeft: `${i * 44}px` }}
+              >
+                {/* tick + connecting line */}
+                <span className="absolute left-0 top-1.5 w-4 h-[2px] bg-white/25 exp-tick" />
+                {i < EXPERIENCE.length - 1 && (
+                  <span className="absolute left-0 top-2 bottom-0 w-[1.5px] bg-white/10" />
+                )}
+
+                <span
+                  className="text-white/35 text-xs font-mono uppercase tracking-wider block mb-1.5"
+                >
+                  {exp.year}
+                </span>
+                <h3
+                  className="text-white text-lg font-semibold mb-1"
+                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                >
+                  {exp.role}
+                </h3>
+                <p className="text-white/45 text-sm">{exp.org}</p>
+                {exp.note && (
+                  <p className="text-white/30 text-sm mt-1 max-w-md">{exp.note}</p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
