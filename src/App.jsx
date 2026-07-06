@@ -142,15 +142,19 @@ export default function Home() {
           margin-right: 8px;
         }
 
+        /* Outer hit-area now fully encloses the photo AND all 4 badges,
+           so moving the cursor between them never leaves a hoverable element. */
         .photo-frame {
           position: relative;
+          width: 550px;
+          height: 565px;
         }
         .orbit-ring {
           position: absolute;
-          top: -40px;
-          bottom: -40px;
-          left: -80px;
-          right: -80px;
+          top: 36px;
+          left: 29px;
+          width: 460px;
+          height: 460px;
           border-radius: 50%;
           border: 1.5px dashed rgba(79,142,247,0.35);
           opacity: 0;
@@ -288,7 +292,11 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 hidden lg:flex flex-1 justify-center items-center">
-          <div className="photo-frame">
+          <div
+            className="photo-frame"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
             <div className="orbit-ring" />
 
             <a
@@ -296,7 +304,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "-36px", left: "110px" }}
+              style={{ top: "30px", left: "219px" }}
               aria-label="GitHub"
             >
               <FaGithub />
@@ -306,7 +314,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "99px", left: "358px" }}
+              style={{ top: "165px", left: "467px" }}
               aria-label="LinkedIn"
             >
               <FaLinkedin />
@@ -314,7 +322,7 @@ export default function Home() {
             <a
               href="mailto:youremail@example.com"
               className="orbit-badge"
-              style={{ top: "418px", left: "247px" }}
+              style={{ top: "484px", left: "356px" }}
               aria-label="Email"
             >
               <FaEnvelope />
@@ -324,23 +332,23 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "221px", left: "-79px" }}
+              style={{ top: "287px", left: "30px" }}
               aria-label="Download Resume"
             >
               <FaFileDownload />
             </a>
 
             <div
-              className="relative flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
+              className="absolute flex flex-col items-center w-[300px] rounded-3xl overflow-hidden"
               style={{
+                top: "66px",
+                left: "109px",
                 background: isHovering ? "transparent" : "rgba(255,255,255,0.03)",
                 border: isHovering ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
                 backdropFilter: isHovering ? "none" : "blur(20px)",
                 WebkitBackdropFilter: isHovering ? "none" : "blur(20px)",
                 transition: "background 0.4s ease, border-color 0.4s ease",
               }}
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
             >
               <div className="w-full h-100 overflow-hidden relative">
                 <img
