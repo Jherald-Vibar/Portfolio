@@ -162,7 +162,7 @@ function normalizeProject(project, i) {
 // description, tags/year/thumbnail) in place, pushing the rows below it down.
 function ProjectRow({ project, isOpen, onToggle }) {
   return (
-    <div className="proj-row-wrap border-b" style={{ borderColor: "#d9d3c6" }}>
+    <div className="proj-row-wrap border-b" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
       <button
         type="button"
         onClick={onToggle}
@@ -172,12 +172,12 @@ function ProjectRow({ project, isOpen, onToggle }) {
         <div className="flex items-baseline gap-4 min-w-0">
           <h3
             className="proj-title text-xl md:text-2xl font-bold tracking-tight truncate"
-            style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+            style={{ fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.92)" }}
           >
             {project.title}
           </h3>
           {project.year && (
-            <span className="text-sm shrink-0" style={{ color: "#9a927f" }}>
+            <span className="text-sm shrink-0" style={{ color: "rgba(255,255,255,0.4)" }}>
               {project.year}
             </span>
           )}
@@ -186,13 +186,13 @@ function ProjectRow({ project, isOpen, onToggle }) {
         <div className="flex items-center gap-6 shrink-0">
           <span
             className="hidden sm:block text-xs uppercase tracking-wide"
-            style={{ color: "#9a927f", fontFamily: "'Space Grotesk', sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {project.tech.join(" · ")}
           </span>
           <span
             className="proj-toggle flex items-center justify-center w-6 h-6 shrink-0"
-            style={{ color: isOpen ? "#c1440e" : "#1a1712" }}
+            style={{ color: isOpen ? "#4f8ef7" : "rgba(255,255,255,0.92)" }}
           >
             {isOpen ? <FaTimes size={15} /> : <FaPlus size={13} />}
           </span>
@@ -209,8 +209,8 @@ function ProjectRow({ project, isOpen, onToggle }) {
                 style={{
                   width: "36px",
                   height: "104px",
-                  background: "#c1440e",
-                  color: "#f4ede1",
+                  background: "#4f8ef7",
+                  color: "#ffffff",
                   writingMode: "vertical-rl",
                   transform: "rotate(180deg)",
                   fontSize: "11px",
@@ -227,20 +227,20 @@ function ProjectRow({ project, isOpen, onToggle }) {
                   <>
                     <span
                       className="text-4xl md:text-5xl font-bold leading-none"
-                      style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+                      style={{ fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.92)" }}
                     >
                       {project.stat.value}
                     </span>
-                    <span className="text-xs mt-2" style={{ color: "#9a927f" }}>
+                    <span className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>
                       {project.stat.label}
                     </span>
-                    <div className="w-full border-t my-4" style={{ borderColor: "#d9d3c6" }} />
+                    <div className="w-full border-t my-4" style={{ borderColor: "rgba(255,255,255,0.1)" }} />
                   </>
                 )}
                 {project.role && (
                   <span
                     className="text-[11px] font-semibold uppercase tracking-wide"
-                    style={{ color: "#1a1712", fontFamily: "'Space Grotesk', sans-serif" }}
+                    style={{ color: "rgba(255,255,255,0.92)", fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     {project.role}
                   </span>
@@ -252,17 +252,17 @@ function ProjectRow({ project, isOpen, onToggle }) {
             <div className="flex-1 min-w-0">
               <h4
                 className="text-3xl md:text-5xl font-bold leading-tight mb-5"
-                style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+                style={{ fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.92)" }}
               >
                 {project.title}
               </h4>
               {project.summary && (
-                <p className="text-lg md:text-xl leading-snug mb-4" style={{ color: "#1a1712" }}>
+                <p className="text-lg md:text-xl leading-snug mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
                   {project.summary}
                 </p>
               )}
               {project.fullDescription && project.fullDescription !== project.summary && (
-                <p className="text-base leading-relaxed" style={{ color: "#9a927f" }}>
+                <p className="text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {project.fullDescription}
                 </p>
               )}
@@ -275,7 +275,7 @@ function ProjectRow({ project, isOpen, onToggle }) {
                   <span
                     key={t}
                     className="px-3 py-1.5 text-xs font-medium border rounded-md"
-                    style={{ borderColor: "#c9c2b3", color: "#1a1712" }}
+                    style={{ borderColor: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.92)" }}
                   >
                     {t}
                   </span>
@@ -284,12 +284,12 @@ function ProjectRow({ project, isOpen, onToggle }) {
 
               {project.year && (
                 <div>
-                  <p className="text-[11px] uppercase tracking-wide mb-1" style={{ color: "#9a927f" }}>
+                  <p className="text-[11px] uppercase tracking-wide mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>
                     Year
                   </p>
                   <p
                     className="text-2xl font-bold"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#1a1712" }}
+                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.92)" }}
                   >
                     {project.year}
                   </p>
@@ -297,7 +297,7 @@ function ProjectRow({ project, isOpen, onToggle }) {
               )}
 
               {(project.liveUrl || project.repoUrl) && (
-                <div className="flex items-center gap-3" style={{ color: "#9a927f" }}>
+                <div className="flex items-center gap-3" style={{ color: "rgba(255,255,255,0.4)" }}>
                   <FaHashtag size={13} />
                   <a
                     href={project.liveUrl ?? project.repoUrl}
@@ -305,14 +305,14 @@ function ProjectRow({ project, isOpen, onToggle }) {
                     rel="noopener noreferrer"
                     aria-label="Open project link"
                     className="hover:opacity-70"
-                    style={{ color: "#9a927f" }}
+                    style={{ color: "rgba(255,255,255,0.4)" }}
                   >
                     <FaExternalLinkAlt size={13} />
                   </a>
                 </div>
               )}
 
-              <div className="rounded-lg overflow-hidden border" style={{ borderColor: "#d9d3c6" }}>
+              <div className="rounded-lg overflow-hidden border" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
                 <img
                   src={project.images[0]}
                   alt={project.title}
@@ -515,7 +515,7 @@ export default function Home() {
 
         /* --- Project accordion (editorial case-study index) --- */
         .proj-panel {
-          background: #f4ede1;
+          background: rgba(255,255,255,0.02);
         }
         .proj-row-header {
           cursor: pointer;
@@ -846,7 +846,7 @@ export default function Home() {
             A few things I've built, end to end.
           </p>
 
-          <div className="proj-panel rounded-2xl px-6 md:px-10 mb-16 border-t" style={{ borderColor: "#d9d3c6" }}>
+          <div className="proj-panel rounded-2xl px-6 md:px-10 mb-16 border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
             {PROJECTS.map((project, i) => {
               const normalized = normalizeProject(project, i);
               const isOpen = openProjectIndex === i;
