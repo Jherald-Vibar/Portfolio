@@ -3,9 +3,7 @@ import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
-// Sample/placeholder project cover — swap the path/extension to match
-// wherever "sibol-1" actually lives in your assets folder.
-import Sibol1 from './assets/images/sibol-1.png';
+import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
 import {
   FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
