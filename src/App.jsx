@@ -147,11 +147,11 @@ export default function Home() {
         }
         .orbit-ring {
           position: absolute;
-          inset: -34px;
-          border-radius: 50%;
+          inset: -22px;
+          border-radius: 2.25rem;
           border: 1.5px dashed rgba(79,142,247,0.35);
           opacity: 0;
-          transform: scale(0.9);
+          transform: scale(0.96);
           transition: opacity 0.4s ease, transform 0.4s ease;
           pointer-events: none;
         }
@@ -293,7 +293,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "-24px", left: "50%", marginLeft: "-24px" }}
+              style={{ top: "-24px", left: "-24px" }}
               aria-label="GitHub"
             >
               <FaGithub />
@@ -303,7 +303,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "50%", right: "-24px", marginTop: "-24px" }}
+              style={{ top: "-24px", right: "-24px" }}
               aria-label="LinkedIn"
             >
               <FaLinkedin />
@@ -311,7 +311,7 @@ export default function Home() {
             <a
               href="mailto:youremail@example.com"
               className="orbit-badge"
-              style={{ bottom: "-24px", left: "50%", marginLeft: "-24px" }}
+              style={{ bottom: "-24px", right: "-24px" }}
               aria-label="Email"
             >
               <FaEnvelope />
@@ -321,7 +321,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
-              style={{ top: "50%", left: "-24px", marginTop: "-24px" }}
+              style={{ bottom: "-24px", left: "-24px" }}
               aria-label="Download Resume"
             >
               <FaFileDownload />
