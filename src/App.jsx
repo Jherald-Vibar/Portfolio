@@ -414,7 +414,7 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-3">
             {SKILLS.map((skill, i) => {
-              const label = typeof skill === "string" ? skill : skill.name;
+              const label = typeof skill === "string" ? skill : skill.label;
               return (
                 <span
                   key={label ?? i}

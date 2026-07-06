@@ -1,12 +1,23 @@
+import {
+  SiLaravel,
+  SiFlutter,
+  SiMysql,
+  SiReact,
+  SiPhp,
+  SiDart,
+  SiDocker,
+} from "react-icons/si";
+import { FaMicrosoft } from "react-icons/fa";
+
 export const SKILLS = [
-  { label: "Laravel", icon: "🔴" },
-  { label: "Flutter", icon: "🔵" },
-  { label: "MySQL", icon: "🟠" },
-  { label: "React", icon: "⚛️" },
-  { label: "VBA / Access", icon: "🟢" },
-  { label: "Docker", icon: "🐳" },
-  { label: "PHP", icon: "🟣" },
-  { label: "Dart", icon: "🎯" },
+  { label: "Laravel", icon: SiLaravel, color: "#FF2D20" },
+  { label: "Flutter", icon: SiFlutter, color: "#02569B" },
+  { label: "MySQL", icon: SiMysql, color: "#4479A1" },
+  { label: "React", icon: SiReact, color: "#61DAFB" },
+  { label: "VBA / Access", icon: FaMicrosoft, color: "#A4373A" },
+  { label: "Docker", icon: SiDocker, color: "#2496ED" },
+  { label: "PHP", icon: SiPhp, color: "#777BB4" },
+  { label: "Dart", icon: SiDart, color: "#0175C2" },
 ];
 
 export const PROJECTS = [
