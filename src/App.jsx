@@ -300,7 +300,7 @@ export default function Home() {
             <div className="orbit-ring" />
 
             <a
-              href="https://github.com/Jherald-Vibar"
+              href="https://github.com/your-username"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -310,7 +310,7 @@ export default function Home() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/jherald-vibar-319741285"
+              href="https://linkedin.com/in/your-username"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -320,7 +320,7 @@ export default function Home() {
               <FaLinkedin />
             </a>
             <a
-              href="mailto:vibar_jherald@spcc.edu.ph"
+              href="mailto:youremail@example.com"
               className="orbit-badge"
               style={{ top: "484px", left: "356px" }}
               aria-label="Email"
@@ -414,14 +414,15 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-3">
             {SKILLS.map((skill, i) => {
-              const label = typeof skill === "string" ? skill : skill.label;
+              const Icon = skill.icon;
               return (
                 <span
-                  key={label ?? i}
-                  className="skill-chip px-5 py-2.5 rounded-xl text-sm text-white/80 font-medium"
+                  key={skill.label ?? i}
+                  className="skill-chip px-5 py-2.5 rounded-xl text-sm text-white/80 font-medium flex items-center gap-2"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
-                  {label}
+                  {Icon && <Icon style={{ color: skill.color, fontSize: "16px" }} />}
+                  {skill.label}
                 </span>
               );
             })}
