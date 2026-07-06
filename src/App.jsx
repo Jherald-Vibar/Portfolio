@@ -330,6 +330,7 @@ function ProjectRow({ project, isOpen, onToggle }) {
 export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [tapRevealed, setTapRevealed] = useState(false);
   const [openProjectIndex, setOpenProjectIndex] = useState(null);
 
   // Track mouse across the ENTIRE window, not just one section,
@@ -485,12 +486,17 @@ export default function Home() {
 
         /* Below desktop, there's no hover to reveal the ring/badges, so keep
            them permanently visible and tappable instead of hidden. */
-        @media (max-width: 1023px) {
-          .orbit-badge {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            pointer-events: auto;
-          }
+        /* Below desktop there's no hover, so tapping the photo toggles this
+           class, revealing the ring and badges together instead of one
+           without the other. */
+        .photo-frame.is-active .orbit-ring {
+          opacity: 1;
+          transform: scale(1);
+        }
+        .photo-frame.is-active .orbit-badge {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+          pointer-events: auto;
         }
 
         /* --- Projects section --- */
@@ -686,7 +692,8 @@ export default function Home() {
 
         <div className="relative z-10 flex flex-1 justify-center items-center mt-16 lg:mt-0">
           <div
-            className="photo-frame"
+            className={`photo-frame ${tapRevealed ? "is-active" : ""}`}
+            onClick={() => setTapRevealed((v) => !v)}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
