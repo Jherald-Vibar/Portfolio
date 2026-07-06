@@ -3,9 +3,13 @@ import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
+// Sample/placeholder project cover — swap the path/extension to match
+// wherever "sibol-1" actually lives in your assets folder.
+import Sibol1 from './assets/images/sibol-1.png';
 import {
   FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
+  FaTimes, FaChevronLeft, FaChevronRight, FaUserTie,
 } from 'react-icons/fa';
 
 function GameTypewriter({ text, speed = 150 }) {
@@ -131,9 +135,232 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
   );
 }
 
+// Normalizes a project object from PROJECTS into a consistent shape, since
+// the underlying data file's field names may vary (title/name, tech/stack, etc).
+function normalizeProject(project, i) {
+  const images =
+    project.images ??
+    (project.image ? [project.image] : null) ??
+    [Sibol1]; // placeholder so the card/modal always has something to show
+
+  return {
+    title: project.title ?? project.name ?? `Project ${i + 1}`,
+    summary: project.summary ?? project.description ?? project.desc ?? "",
+    fullDescription:
+      project.fullDescription ?? project.description ?? project.desc ?? "",
+    role: project.role ?? project.myRole ?? "",
+    tech: project.tech ?? project.stack ?? project.tags ?? [],
+    images,
+    liveUrl: project.link ?? project.demo ?? project.url ?? null,
+    repoUrl: project.github ?? project.repo ?? project.source ?? null,
+  };
+}
+
+// A compact box that expands to fill the full row width on hover, revealing
+// its cover image and a short summary. Click opens the full project modal.
+function ProjectRow({ project, onOpen }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="project-row group relative w-full text-left rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.02]"
+    >
+      <div
+        className="project-row-bg absolute inset-0"
+        style={{
+          backgroundImage: `url(${project.images[0]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="project-row-scrim absolute inset-0" />
+
+      <div className="relative z-10 flex items-center gap-5 px-6 py-5">
+        <div className="project-row-thumb shrink-0 rounded-xl overflow-hidden border border-white/10">
+          <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h3
+            className="text-white text-base md:text-lg font-semibold truncate"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {project.title}
+          </h3>
+          <p className="project-row-summary text-white/45 text-sm mt-1 line-clamp-1">
+            {project.summary}
+          </p>
+          <div className="project-row-tech flex flex-wrap gap-2 mt-3">
+            {project.tech.slice(0, 5).map((t) => (
+              <span key={t} className="tag">{t}</span>
+            ))}
+          </div>
+        </div>
+
+        <span className="project-row-cta shrink-0 text-sm font-medium text-[#7eb8ff] whitespace-nowrap">
+          View project →
+        </span>
+      </div>
+    </button>
+  );
+}
+
+// Full-screen overlay: image carousel, full description, role, and tech stack.
+function ProjectModal({ project, onClose }) {
+  const [index, setIndex] = useState(0);
+  const images = project.images;
+
+  const next = () => setIndex((i) => (i + 1) % images.length);
+  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images.length]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+      style={{ background: "rgba(5,5,9,0.85)", backdropFilter: "blur(6px)" }}
+      onClick={onClose}
+    >
+      <div
+        className="modal-panel glass relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="modal-close absolute top-4 right-4 z-20 w-9 h-9 rounded-full flex items-center justify-center"
+          aria-label="Close"
+        >
+          <FaTimes />
+        </button>
+
+        {/* Carousel */}
+        <div className="relative w-full h-64 md:h-80 bg-black/30">
+          <img
+            src={images[index]}
+            alt={`${project.title} screenshot ${index + 1}`}
+            className="w-full h-full object-cover"
+          />
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={prev}
+                className="carousel-arrow absolute left-3 top-1/2 -translate-y-1/2"
+                aria-label="Previous image"
+              >
+                <FaChevronLeft />
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                className="carousel-arrow absolute right-3 top-1/2 -translate-y-1/2"
+                aria-label="Next image"
+              >
+                <FaChevronRight />
+              </button>
+              <div className="absolute bottom-3 inset-x-0 flex justify-center gap-1.5">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setIndex(i)}
+                    className="carousel-dot"
+                    style={{ opacity: i === index ? 1 : 0.35 }}
+                    aria-label={`Go to image ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="p-6 md:p-8">
+          <h3
+            className="text-white text-xl md:text-2xl font-bold mb-3"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {project.title}
+          </h3>
+
+          {project.fullDescription && (
+            <p className="text-white/55 text-sm leading-relaxed mb-5">
+              {project.fullDescription}
+            </p>
+          )}
+
+          {project.role && (
+            <div className="flex items-start gap-3 mb-5">
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] shrink-0">
+                <FaUserTie style={{ color: "#7eb8ff", fontSize: "13px" }} />
+              </span>
+              <div>
+                <p className="text-white/85 text-sm font-medium">My Role</p>
+                <p className="text-white/45 text-sm">{project.role}</p>
+              </div>
+            </div>
+          )}
+
+          {project.tech.length > 0 && (
+            <div className="mb-6">
+              <p className="text-white/85 text-sm font-medium mb-2">Tech Stack</p>
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <span key={t} className="tag">{t}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-4">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium text-white"
+                style={{
+                  background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
+                  boxShadow: "0 0 20px rgba(79,142,247,0.28)",
+                }}
+              >
+                Live demo
+              </a>
+            )}
+            {project.repoUrl && (
+              <a
+                href={project.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass px-5 py-2.5 rounded-xl text-sm font-medium text-white/70 hover:text-white flex items-center gap-2"
+              >
+                <FaGithub /> Code
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [activeProject, setActiveProject] = useState(null);
 
   // Track mouse across the ENTIRE window, not just one section,
   // so the glow layer (which is fixed to the viewport) works everywhere.
@@ -623,74 +850,25 @@ export default function Home() {
             A few things I've built, end to end.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-16">
+          <div className="flex flex-col gap-4 mb-16">
             {PROJECTS.map((project, i) => {
-              const title = project.title ?? project.name ?? `Project ${i + 1}`;
-              const description = project.description ?? project.desc ?? "";
-              const tech = project.tech ?? project.stack ?? project.tags ?? [];
-              const liveUrl = project.link ?? project.demo ?? project.url ?? null;
-              const repoUrl = project.github ?? project.repo ?? project.source ?? null;
-
+              const normalized = normalizeProject(project, i);
               return (
-                <div
-                  key={title}
-                  className="project-card glass rounded-2xl overflow-hidden flex flex-col"
-                >
-                  {project.image && (
-                    <div className="w-full h-40 overflow-hidden">
-                      <img
-                        src={project.image}
-                        alt={title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3
-                      className="text-white text-lg font-semibold mb-2"
-                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                    >
-                      {title}
-                    </h3>
-                    {description && (
-                      <p className="text-white/45 text-sm leading-relaxed mb-4 flex-1">
-                        {description}
-                      </p>
-                    )}
-                    {tech.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {tech.map((t) => (
-                          <span key={t} className="tag">{t}</span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex gap-4 mt-auto pt-1">
-                      {liveUrl && (
-                        <a
-                          href={liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[#7eb8ff] text-sm font-medium hover:text-white transition-colors"
-                        >
-                          Live demo →
-                        </a>
-                      )}
-                      {repoUrl && (
-                        <a
-                          href={repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 text-white/50 text-sm font-medium hover:text-white transition-colors"
-                        >
-                          <FaGithub /> Code
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <ProjectRow
+                  key={normalized.title}
+                  project={normalized}
+                  onOpen={() => setActiveProject(normalized)}
+                />
               );
             })}
           </div>
+
+          {activeProject && (
+            <ProjectModal
+              project={activeProject}
+              onClose={() => setActiveProject(null)}
+            />
+          )}
 
           {/* GitHub activity — simple, professional, GitHub-green contribution graph */}
           <div className="github-panel rounded-2xl px-6 py-6 md:px-8 md:py-7">
@@ -738,6 +916,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <Footer />
     </div>
   );
