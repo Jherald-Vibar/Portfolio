@@ -28,9 +28,9 @@ export const SKILLS = [
 
 export const PROJECTS = [
   {
-    name: "LISAI",
-    desc: "Payroll management system with MS Access frontend and MySQL backend via ODBC.",
-    tags: ["VBA", "MySQL", "Access"],
+    name: "SIBOL",
+    desc: "An IoT Web for smart gardening it used YoloV11 model for machine learning. It use Laravel for backend and React for Frontend",
+    tags: ["React JS", "Laravel", "Python"],
   },
   {
     name: "Voyair",
