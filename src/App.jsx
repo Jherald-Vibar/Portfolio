@@ -9,6 +9,7 @@ import {
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
   FaTimes, FaPlus, FaHashtag, FaExternalLinkAlt,
 } from 'react-icons/fa';
+import "./assets/style.css"
 
 function GameTypewriter({ text, speed = 150 }) {
   const [count, setCount] = useState(0);
@@ -131,13 +132,11 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
   );
 }
 
-// Normalizes a project object from PROJECTS into a consistent shape, since
-// the underlying data file's field names may vary (title/name, tech/stack, etc).
 function normalizeProject(project, i) {
   const images =
     project.images ??
     (project.image ? [project.image] : null) ??
-    [Sibol1]; // placeholder so the card/modal always has something to show
+    [Sibol1]; 
 
   return {
     title: project.title ?? project.name ?? `Project ${i + 1}`,
@@ -150,16 +149,9 @@ function normalizeProject(project, i) {
     images,
     liveUrl: project.link ?? project.demo ?? project.url ?? null,
     repoUrl: project.github ?? project.repo ?? project.source ?? null,
-    // Optional highlight stat (e.g. { value: "396", label: "hours OJT completed" }).
-    // Omitted gracefully if a project doesn't define one.
     stat: project.stat ?? null,
   };
 }
-
-// Editorial accordion row, styled like a case-study index: collapsed it's a
-// thin bordered line with title/year on the left and tags + a "+" on the
-// right; expanded it reveals a three-column case-study layout (stat sidebar,
-// description, tags/year/thumbnail) in place, pushing the rows below it down.
 function ProjectRow({ project, isOpen, onToggle }) {
   return (
     <div className="proj-row-wrap border-b" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
@@ -345,258 +337,6 @@ export default function Home() {
 
   return (
     <div className="relative isolate min-h-screen bg-[#09090f] text-white font-sans">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; }
-        .glass {
-          background: rgba(255, 255, 255, 0.04);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass:hover {
-          background: rgba(255, 255, 255, 0.07);
-          border-color: rgba(100, 160, 255, 0.2);
-          transition: all 0.3s ease;
-        }
-        .glow-text {
-          background: linear-gradient(135deg, #fff 0%, #a0c4ff 60%, #6b9fff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        .tag {
-          background: rgba(79, 142, 247, 0.12);
-          border: 1px solid rgba(79, 142, 247, 0.25);
-          color: #7eb8ff;
-          font-size: 11px;
-          padding: 2px 10px;
-          border-radius: 999px;
-          font-family: 'Space Grotesk', sans-serif;
-          letter-spacing: 0.03em;
-        }
-        .tech-card {
-          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-        }
-        .tech-card:hover {
-          background: rgba(255,255,255,0.04);
-          border-color: rgba(255,255,255,0.12);
-          transform: translateY(-2px);
-        }
-        .nav-link {
-          color: rgba(255,255,255,0.5);
-          font-size: 14px;
-          transition: color 0.2s;
-        }
-        .nav-link:hover { color: rgba(255,255,255,0.95); }
-
-        @keyframes hueShift {
-          0%   { filter: hue-rotate(0deg); }
-          50%  { filter: hue-rotate(180deg); }
-          100% { filter: hue-rotate(360deg); }
-        }
-        .cursor-glow {
-          pointer-events: none;
-          position: absolute;
-          width: 700px;
-          height: 700px;
-          border-radius: 50%;
-          background: radial-gradient(circle,
-            rgba(79,142,247,0.12) 0%,
-            rgba(167,139,250,0.06) 40%,
-            transparent 65%
-          );
-          filter: blur(20px);
-          transform: translate(-50%, -50%);
-          transition: left 0.08s ease, top 0.08s ease;
-          animation: hueShift 12s ease-in-out infinite;
-        }
-        .orb-1 { animation: hueShift 14s ease-in-out infinite; }
-        .orb-2 { animation: hueShift 18s ease-in-out infinite reverse; }
-        .orb-3 { animation: hueShift 16s ease-in-out infinite; }
-
-        .section-divider {
-          border: none;
-          border-top: 1px solid rgba(255,255,255,0.06);
-        }
-        .accent-dot {
-          width: 6px; height: 6px;
-          background: #4f8ef7;
-          border-radius: 50%;
-          display: inline-block;
-          margin-right: 8px;
-        }
-
-        .photo-frame {
-          position: relative;
-          width: min(85vw, 550px);
-          aspect-ratio: 550 / 565;
-          margin: 0 auto;
-        }
-        .orbit-ring {
-          position: absolute;
-          top: 6.37%;
-          left: 5.27%;
-          width: 83.64%;
-          height: 81.42%;
-          border-radius: 50%;
-          border: 1.5px dashed rgba(79,142,247,0.35);
-          opacity: 0;
-          transform: scale(0.96);
-          transition: opacity 0.4s ease, transform 0.4s ease;
-          pointer-events: none;
-        }
-        .photo-frame:hover .orbit-ring {
-          opacity: 1;
-          transform: scale(1);
-        }
-        .orbit-badge {
-          position: absolute;
-          width: clamp(40px, 9vw, 48px);
-          height: clamp(40px, 9vw, 48px);
-          border-radius: 50%;
-          background: #14141f;
-          border: 1px solid rgba(255,255,255,0.1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: clamp(16px, 4vw, 20px);
-          color: white;
-          opacity: 0;
-          transform: translate(-50%, -50%) scale(0.5);
-          transition: opacity 0.35s ease, transform 0.35s ease, background 0.2s ease, border-color 0.2s ease;
-          pointer-events: none;
-          z-index: 20;
-        }
-        .photo-frame:hover .orbit-badge {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1);
-          pointer-events: auto;
-        }
-        .orbit-badge:hover {
-          background: rgba(79,142,247,0.15);
-          border-color: rgba(79,142,247,0.4);
-          transform: translate(-50%, -50%) scale(1.12);
-        }
-        .orbit-badge:nth-of-type(1) { transition-delay: 0.05s; }
-        .orbit-badge:nth-of-type(2) { transition-delay: 0.1s; }
-        .orbit-badge:nth-of-type(3) { transition-delay: 0.15s; }
-        .orbit-badge:nth-of-type(4) { transition-delay: 0.2s; }
-
-        /* Below desktop, there's no hover to reveal the ring/badges, so keep
-           them permanently visible and tappable instead of hidden. */
-        /* Below desktop there's no hover, so tapping the photo toggles this
-           class, revealing the ring and badges together instead of one
-           without the other. */
-        .photo-frame.is-active .orbit-ring {
-          opacity: 1;
-          transform: scale(1);
-        }
-        .photo-frame.is-active .orbit-badge {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1);
-          pointer-events: auto;
-        }
-
-        /* --- Projects section --- */
-        .project-card {
-          transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-        .project-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(79,142,247,0.28);
-          box-shadow: 0 16px 36px -16px rgba(79,142,247,0.3);
-        }
-        .github-panel {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.07);
-        }
-        .github-link-btn {
-          color: rgba(255,255,255,0.6);
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.02);
-          transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-        }
-        .github-link-btn:hover {
-          color: #fff;
-          border-color: rgba(57,211,83,0.4);
-          background: rgba(57,211,83,0.08);
-        }
-        .legend-swatch {
-          width: 10px;
-          height: 10px;
-          border-radius: 2px;
-          display: inline-block;
-        }
-
-        /* --- Project accordion (editorial case-study index) --- */
-        .proj-panel {
-          background: rgba(255,255,255,0.02);
-        }
-        .proj-row-header {
-          cursor: pointer;
-          background: transparent;
-          border: none;
-        }
-        .proj-row-header:hover .proj-title {
-          opacity: 0.7;
-        }
-        .proj-title {
-          transition: opacity 0.2s ease;
-        }
-        .proj-toggle {
-          transition: transform 0.2s ease, color 0.2s ease;
-        }
-        .proj-row-body {
-          animation: projExpand 0.25s ease;
-        }
-        @keyframes projExpand {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Experience section --- */
-        .exp-card {
-          transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
-        }
-        .exp-row:hover .exp-card {
-          transform: translateY(-3px);
-          border-color: rgba(79,142,247,0.3);
-          box-shadow: 0 14px 32px -14px rgba(79,142,247,0.28);
-        }
-        .exp-node {
-          transition: transform 0.25s ease, border-color 0.25s ease;
-        }
-        .exp-row:hover .exp-node {
-          transform: scale(1.06);
-          border-color: rgba(79,142,247,0.55);
-        }
-        .exp-pulse {
-          position: absolute;
-          inset: -6px;
-          border-radius: 20px;
-          border: 1px solid rgba(79,142,247,0.4);
-          opacity: 0;
-          animation: expPulse 2.8s ease-out infinite;
-        }
-        @keyframes expPulse {
-          0%   { opacity: 0.5; transform: scale(0.85); }
-          70%  { opacity: 0; transform: scale(1.25); }
-          100% { opacity: 0; transform: scale(1.25); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .exp-pulse { animation: none; opacity: 0; }
-          .exp-row { transition: none !important; opacity: 1 !important; transform: none !important; }
-        }
-        @media (max-width: 768px) {
-          .exp-row { margin-left: 0 !important; }
-        }
-      `}</style>
-
-      {/* Fixed ambient background: covers the whole viewport, sits behind
-          every section (z-index -1), and stays put while you scroll, so
-          the glow/orbs are visible on every part of the homepage. */}
       <div
         className="fixed inset-0 overflow-hidden pointer-events-none"
         style={{ zIndex: -1 }}
@@ -707,7 +447,7 @@ export default function Home() {
             <div className="orbit-ring" />
 
             <a
-              href="https://github.com/your-username"
+              href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -717,7 +457,7 @@ export default function Home() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/your-username"
+              href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -968,7 +708,7 @@ export default function Home() {
 
           <div className="flex items-center justify-center gap-4">
             <a
-              href="https://github.com/your-username"
+              href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -977,7 +717,7 @@ export default function Home() {
               <FaGithub size={20} />
             </a>
             <a
-              href="https://linkedin.com/in/your-username"
+              href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
