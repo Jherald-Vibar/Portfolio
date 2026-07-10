@@ -2,7 +2,7 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from './App.jsx'
 import ProjectDetails from "./components/views/ProjectDetails.jsx";
-import ResumeViewer from "./components/views/Resumeviewer.jsx";
+import ResumeViewer from "./components/views/ResumeViewer.jsx";
 
 
 const router = createBrowserRouter([
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/resume',
-        element: <Resumeviewer/> 
+        element: <ResumeViewer/> 
     },
     {
         path: '/project/:project',

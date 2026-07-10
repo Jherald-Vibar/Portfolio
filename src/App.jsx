@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import TerminalIntro from "./components/parts/TerminalIntro.jsx";
-import ResumeViewer from "./components/views/Resumeviewer.jsx";
+import ResumeViewer from "./components/views/ResumeViewer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
 import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
