@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
+import TerminalIntro from "./components/parts/TerminalIntro.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
 import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
@@ -345,6 +346,7 @@ export default function Home() {
   const [tapRevealed, setTapRevealed] = useState(false);
   const [openProjectIndex, setOpenProjectIndex] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [booted, setBooted] = useState(false);
 
   useEffect(() => {
     const handleMove = (e) => {
@@ -356,6 +358,7 @@ export default function Home() {
 
   return (
     <div className="relative isolate min-h-screen bg-[#09090f] text-white font-sans">
+      {!booted && <TerminalIntro onComplete={() => setBooted(true)} />}
       <div
         className="fixed inset-0 overflow-hidden pointer-events-none"
         style={{ zIndex: -1 }}
@@ -732,7 +735,7 @@ export default function Home() {
               boxShadow: "0 0 30px rgba(79,142,247,0.3)",
             }}
           >
-            <FaEnvelope /> vibar_jherald@spcc.edu.ph
+            <FaEnvelope /> youremail@example.com
           </a>
 
           <div className="flex items-center justify-center gap-4">
