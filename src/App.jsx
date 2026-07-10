@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SKILLS, PROJECTS, EXPERIENCE } from './constant/data.js';
 import Footer from "./components/parts/Footer.jsx";
 import TerminalIntro from "./components/parts/TerminalIntro.jsx";
+import ResumeViewer from "./components/parts/ResumeViewer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
 import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
@@ -347,6 +348,7 @@ export default function Home() {
   const [openProjectIndex, setOpenProjectIndex] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [booted, setBooted] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
 
   useEffect(() => {
     const handleMove = (e) => {
@@ -510,16 +512,15 @@ export default function Home() {
             >
               <FaEnvelope />
             </a>
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setResumeOpen(true)}
               className="orbit-badge"
               style={{ top: "50.8%", left: "5.45%" }}
-              aria-label="Download Resume"
+              aria-label="View Resume"
             >
               <FaFileDownload />
-            </a>
+            </button>
 
             <div
               className="absolute flex flex-col items-center rounded-3xl overflow-hidden"
@@ -757,15 +758,14 @@ export default function Home() {
             >
               <FaLinkedin size={20} />
             </a>
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Download Resume"
+            <button
+              type="button"
+              onClick={() => setResumeOpen(true)}
+              aria-label="View Resume"
               className="glass w-14 h-14 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors duration-200"
             >
               <FaFileDownload size={18} />
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -779,6 +779,8 @@ export default function Home() {
           onClose={() => setSelectedProject(null)}
         />
       )}
+
+      {resumeOpen && <ResumeViewer onClose={() => setResumeOpen(false)} />}
     </div>
   );
 }
