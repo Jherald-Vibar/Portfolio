@@ -4,10 +4,11 @@ import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
 import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
+import ProjectDetails from "./components/parts/ProjectDetails.jsx";
 import {
   FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
-  FaTimes, FaPlus, FaHashtag, FaExternalLinkAlt,
+  FaTimes, FaPlus, FaExternalLinkAlt, FaArrowRight,
 } from 'react-icons/fa';
 import "./assets/style.css"
 
@@ -80,7 +81,6 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
         transition: `opacity 0.6s ease ${order * 0.08}s, transform 0.6s ease ${order * 0.08}s`,
       }}
     >
-      {/* connecting rail */}
       {!isLast && (
         <span
           className="absolute left-[27px] top-[56px] w-[2px]"
@@ -91,7 +91,6 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
         />
       )}
 
-      {/* node */}
       <div
         className="exp-node relative flex items-center justify-center shrink-0"
         style={{
@@ -107,7 +106,6 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
         <span className="exp-pulse" />
       </div>
 
-      {/* card */}
       <div className="exp-card glass flex-1 rounded-2xl px-6 py-5 mb-8">
         <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
           <h3
@@ -136,7 +134,7 @@ function normalizeProject(project, i) {
   const images =
     project.images ??
     (project.image ? [project.image] : null) ??
-    [Sibol1]; 
+    [Sibol1];
 
   return {
     title: project.title ?? project.name ?? `Project ${i + 1}`,
@@ -152,7 +150,8 @@ function normalizeProject(project, i) {
     stat: project.stat ?? null,
   };
 }
-function ProjectRow({ project, isOpen, onToggle }) {
+
+function ProjectRow({ project, isOpen, onToggle, onViewDetails }) {
   return (
     <div className="proj-row-wrap border-b" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
       <button
@@ -254,13 +253,23 @@ function ProjectRow({ project, isOpen, onToggle }) {
                 </p>
               )}
               {project.fullDescription && project.fullDescription !== project.summary && (
-                <p className="text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+                <p className="text-base leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {project.fullDescription}
                 </p>
               )}
+
+              {/* View Full Details -> opens the ProjectDetails page */}
+              <button
+                type="button"
+                onClick={onViewDetails}
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#4f8ef7] hover:text-white transition-colors"
+                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+              >
+                View Full Details <FaArrowRight size={12} />
+              </button>
             </div>
 
-            {/* Right rail: tags, year, links, thumbnail */}
+            {/* Right rail: tags, year, live link, thumbnail */}
             <div className="md:w-64 shrink-0 flex flex-col gap-6">
               <div className="flex flex-wrap gap-2">
                 {project.tech.map((t) => (
@@ -288,20 +297,32 @@ function ProjectRow({ project, isOpen, onToggle }) {
                 </div>
               )}
 
-              {(project.liveUrl || project.repoUrl) && (
-                <div className="flex items-center gap-3" style={{ color: "rgba(255,255,255,0.4)" }}>
-                  <FaHashtag size={13} />
-                  <a
-                    href={project.liveUrl ?? project.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Open project link"
-                    className="hover:opacity-70"
-                    style={{ color: "rgba(255,255,255,0.4)" }}
-                  >
-                    <FaExternalLinkAlt size={13} />
-                  </a>
-                </div>
+              {/* Live Demo button */}
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-transform duration-200 hover:-translate-y-0.5"
+                  style={{
+                    background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
+                    boxShadow: "0 0 16px rgba(79,142,247,0.3)",
+                  }}
+                >
+                  <FaExternalLinkAlt size={12} /> Live Demo
+                </a>
+              )}
+
+              {/* Repo link, shown separately if it exists */}
+              {project.repoUrl && (
+                <a
+                  href={project.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/70 hover:text-white transition-colors duration-200"
+                >
+                  <FaGithub size={13} /> View Code
+                </a>
               )}
 
               <div className="rounded-lg overflow-hidden border" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
@@ -324,9 +345,8 @@ export default function Home() {
   const [isHovering, setIsHovering] = useState(false);
   const [tapRevealed, setTapRevealed] = useState(false);
   const [openProjectIndex, setOpenProjectIndex] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  // Track mouse across the ENTIRE window, not just one section,
-  // so the glow layer (which is fixed to the viewport) works everywhere.
   useEffect(() => {
     const handleMove = (e) => {
       setMouse({ x: e.clientX, y: e.clientY });
@@ -435,10 +455,6 @@ export default function Home() {
             className={`photo-frame ${tapRevealed ? "is-active" : ""}`}
             onClick={() => setTapRevealed((v) => !v)}
             onMouseEnter={() => {
-              // Touch devices fire a phantom mouseenter on tap but never a
-              // matching mouseleave, which would otherwise get the photo
-              // stuck on the alternate image forever. Only real hover-capable
-              // pointers (a mouse) should trigger the crossfade.
               if (typeof window !== "undefined" && window.matchMedia && !window.matchMedia("(hover: hover)").matches) return;
               setIsHovering(true);
             }}
@@ -582,10 +598,6 @@ export default function Home() {
 
           <div className="flex flex-col">
             {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
-              // EXPERIENCE is stored oldest → newest. We display newest → oldest
-              // (present at the top), but the staircase indent should still climb
-              // toward the present, so the step level is the original chronological
-              // index, not the display index.
               const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
               return (
                 <ExperienceStep
@@ -622,6 +634,7 @@ export default function Home() {
                   project={normalized}
                   isOpen={isOpen}
                   onToggle={() => setOpenProjectIndex(isOpen ? null : i)}
+                  onViewDetails={() => setSelectedProject(normalized)}
                 />
               );
             })}
@@ -695,7 +708,7 @@ export default function Home() {
             Send a message and I'll get back to you.
           </p>
 
-          <a
+          
             href="mailto:youremail@example.com"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-medium text-base md:text-lg mb-12 transition-transform duration-200 hover:-translate-y-0.5"
             style={{
@@ -737,8 +750,16 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
 
       <Footer />
+
+      {selectedProject && (
+        <ProjectDetails
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </div>
   );
 }
