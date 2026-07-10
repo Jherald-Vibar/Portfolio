@@ -1,15 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   FaTimes,
   FaExternalLinkAlt,
   FaGithub,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 export default function ProjectDetails({ project, onClose }) {
-  // Lock body scroll + allow Esc to close while the overlay is open
+  const [activeImage, setActiveImage] = useState(0);
+
+  // Reset carousel to the first image whenever a new project is opened
+  useEffect(() => {
+    setActiveImage(0);
+  }, [project]);
+
+  // Lock body scroll + keyboard nav (Esc to close, arrows to move through images)
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") {
+        setActiveImage((i) =>
+          project?.images?.length ? (i + 1) % project.images.length : i
+        );
+      }
+      if (e.key === "ArrowLeft") {
+        setActiveImage((i) =>
+          project?.images?.length
+            ? (i - 1 + project.images.length) % project.images.length
+            : i
+        );
+      }
     };
     document.addEventListener("keydown", onKeyDown);
     const prevOverflow = document.body.style.overflow;
@@ -18,9 +39,17 @@ export default function ProjectDetails({ project, onClose }) {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
-  }, [onClose]);
+  }, [onClose, project]);
 
   if (!project) return null;
+
+  const images = project.images?.length ? project.images : [];
+  const hasMultiple = images.length > 1;
+
+  const goNext = () =>
+    setActiveImage((i) => (i + 1) % images.length);
+  const goPrev = () =>
+    setActiveImage((i) => (i - 1 + images.length) % images.length);
 
   return (
     <div
@@ -43,7 +72,7 @@ export default function ProjectDetails({ project, onClose }) {
           type="button"
           onClick={onClose}
           aria-label="Close project details"
-          className="absolute top-4 right-4 md:top-6 md:right-6 z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+          className="absolute top-4 right-4 md:top-6 md:right-6 z-20 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
           style={{
             background: "rgba(255,255,255,0.06)",
             color: "rgba(255,255,255,0.8)",
@@ -52,21 +81,89 @@ export default function ProjectDetails({ project, onClose }) {
           <FaTimes size={16} />
         </button>
 
-        {/* Hero image */}
-        {project.images?.[0] && (
-          <div className="w-full h-56 md:h-80 overflow-hidden rounded-t-2xl">
+        {/* Image carousel */}
+        {images.length > 0 && (
+          <div className="relative w-full h-56 md:h-96 overflow-hidden rounded-t-2xl group">
             <img
-              src={project.images[0]}
-              alt={project.title}
+              key={activeImage}
+              src={images[activeImage]}
+              alt={`${project.title} screenshot ${activeImage + 1}`}
               className="w-full h-full object-cover"
             />
+
             <div
-              className="relative -mt-16 h-16 pointer-events-none"
+              className="absolute bottom-0 inset-x-0 h-20 pointer-events-none"
               style={{
                 background:
                   "linear-gradient(to bottom, transparent, rgba(16,16,24,0.98))",
               }}
             />
+
+            {hasMultiple && (
+              <>
+                {/* Prev / Next arrows */}
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  aria-label="Previous image"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{
+                    background: "rgba(9,9,15,0.6)",
+                    color: "rgba(255,255,255,0.9)",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  <FaChevronLeft size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  aria-label="Next image"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{
+                    background: "rgba(9,9,15,0.6)",
+                    color: "rgba(255,255,255,0.9)",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  <FaChevronRight size={14} />
+                </button>
+
+                {/* Dot indicators */}
+                <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-2">
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveImage(i)}
+                      aria-label={`Go to image ${i + 1}`}
+                      className="rounded-full transition-all"
+                      style={{
+                        width: i === activeImage ? "20px" : "6px",
+                        height: "6px",
+                        background:
+                          i === activeImage
+                            ? "#4f8ef7"
+                            : "rgba(255,255,255,0.35)",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Counter */}
+                <span
+                  className="absolute top-4 left-4 text-xs font-medium px-2.5 py-1 rounded-full"
+                  style={{
+                    background: "rgba(9,9,15,0.6)",
+                    color: "rgba(255,255,255,0.85)",
+                    backdropFilter: "blur(4px)",
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  }}
+                >
+                  {activeImage + 1} / {images.length}
+                </span>
+              </>
+            )}
           </div>
         )}
 
@@ -101,19 +198,27 @@ export default function ProjectDetails({ project, onClose }) {
 
           {/* Tech stack */}
           {project.tech?.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-8">
-              {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="px-3 py-1.5 text-xs font-medium border rounded-md"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.15)",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  {t}
-                </span>
-              ))}
+            <div className="mb-8">
+              <p
+                className="text-[11px] uppercase tracking-wide mb-2.5"
+                style={{ color: "rgba(255,255,255,0.4)" }}
+              >
+                Tools & Tech Stack
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="px-3 py-1.5 text-xs font-medium border rounded-md"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.15)",
+                      color: "rgba(255,255,255,0.85)",
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
@@ -137,25 +242,6 @@ export default function ProjectDetails({ project, onClose }) {
                     {project.fullDescription}
                   </p>
                 )}
-
-              {/* Extra image gallery, if the project has more than one image */}
-              {project.images?.length > 1 && (
-                <div className="grid grid-cols-2 gap-3 mt-8">
-                  {project.images.slice(1).map((img, i) => (
-                    <div
-                      key={i}
-                      className="rounded-lg overflow-hidden border"
-                      style={{ borderColor: "rgba(255,255,255,0.08)" }}
-                    >
-                      <img
-                        src={img}
-                        alt={`${project.title} screenshot ${i + 2}`}
-                        className="w-full h-auto object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Sidebar */}
@@ -196,7 +282,7 @@ export default function ProjectDetails({ project, onClose }) {
                   </a>
                 )}
                 {project.repoUrl && (
-                  <a
+                  <a 
                     href={project.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"

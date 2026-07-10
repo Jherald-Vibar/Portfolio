@@ -11,6 +11,13 @@ import {
   SiCss,
 } from "react-icons/si";
 import { FaMicrosoft } from "react-icons/fa";
+import Sibol1 from '../assets/ProjectImages/Sibol/Sibol-1.png';
+import Sibol2 from '../assets/ProjectImages/Sibol/Sibol-2.png';
+import Sibol3 from '../assets/ProjectImages/Sibol/Sibol-3.png';
+import Sibol4 from '../assets/ProjectImages/Sibol/Sibol-4.png';
+import Sibol5 from '../assets/ProjectImages/Sibol/Sibol-5.png';
+import Sibol6 from '../assets/ProjectImages/Sibol/Sibol-6.png';
+import Sibol7 from '../assets/ProjectImages/Sibol/Sibol-7.png';
 
 export const SKILLS = [
   { label: "Laravel", icon: SiLaravel, color: "#FF2D20" },
@@ -32,6 +39,8 @@ export const PROJECTS = [
     desc: "An IoT Web for smart gardening it used YoloV11 model for machine learning. It use Laravel for backend and React for Frontend",
     tags: ["React JS", "Laravel", "Python"],
     link: "https://sibol-frontend.onrender.com/",
+    role: "Full Stack Developer",
+    images: [Sibol1, Sibol2, Sibol3, Sibol4, Sibol5, Sibol6, Sibol7],
   },
   {
     name: "TaskFlow",
