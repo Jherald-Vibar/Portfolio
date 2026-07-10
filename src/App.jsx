@@ -686,7 +686,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       <section
         id="contact"
         className="relative px-8 md:px-20 py-28"
