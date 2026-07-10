@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { FaTimes, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 
-const RESUME_PATH = "/resume.pdf";
+const RESUME_PATH = "/Resume.pdf";
 
 export default function ResumeViewer({ onClose }) {
   // lock background scroll while open, allow Esc to close

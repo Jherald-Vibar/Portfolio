@@ -1,7 +1,6 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from './App.jsx'
-import Resume from "./components/views/Resumeviewer.jsx";
 import ProjectDetails from "./components/views/ProjectDetails.jsx";
 import ResumeViewer from "./components/views/ResumeViewer.jsx";
 
