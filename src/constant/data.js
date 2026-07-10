@@ -31,6 +31,13 @@ export const PROJECTS = [
     name: "SIBOL",
     desc: "An IoT Web for smart gardening it used YoloV11 model for machine learning. It use Laravel for backend and React for Frontend",
     tags: ["React JS", "Laravel", "Python"],
+    link: "https://sibol-frontend.onrender.com/",
+  },
+  {
+    name: "TaskFlow",
+    desc: "Jira Like to do List with Drag and Drop and also use Google Auth for easy authentication.",
+    tags: ["Vanilla Javascript", "Laravel", ],
+    link: "https://taskflow-z40g.onrender.com/login",
   },
   {
     name: "Voyair",
