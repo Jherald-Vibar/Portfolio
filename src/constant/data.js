@@ -18,6 +18,18 @@ import Sibol4 from '../assets/ProjectImages/Sibol/Sibol-4.png';
 import Sibol5 from '../assets/ProjectImages/Sibol/Sibol-5.png';
 import Sibol6 from '../assets/ProjectImages/Sibol/Sibol-6.png';
 import Sibol7 from '../assets/ProjectImages/Sibol/Sibol-7.png';
+import TaskFlow1 from '../assets/ProjectImages/TaskFlow/taskflow-1.png';
+import TaskFlow2 from '../assets/ProjectImages/TaskFlow/taskflow-2.png';
+import TaskFlow3 from '../assets/ProjectImages/TaskFlow/taskflow-3.png';
+import TaskFlow4 from '../assets/ProjectImages/TaskFlow/taskflow-4.png';
+import TaskFlow5 from '../assets/ProjectImages/TaskFlow/taskflow-5.png';
+import TaskFlow6 from '../assets/ProjectImages/TaskFlow/taskflow-6.png';
+import TaskFlow7 from '../assets/ProjectImages/TaskFlow/taskflow-7.png';
+import TaskFlow8 from '../assets/ProjectImages/TaskFlow/taskflow-8.png';
+import TaskFlow9 from '../assets/ProjectImages/TaskFlow/taskflow-9.png';
+import TaskFlow10 from '../assets/ProjectImages/TaskFlow/taskflow-10.png';
+import TaskFlow11 from '../assets/ProjectImages/TaskFlow/taskflow-11.png';
+
 
 export const SKILLS = [
   { label: "Laravel", icon: SiLaravel, color: "#FF2D20" },
@@ -47,6 +59,8 @@ export const PROJECTS = [
     desc: "Jira Like to do List with Drag and Drop and also use Google Auth for easy authentication.",
     tags: ["Vanilla Javascript", "Laravel", ],
     link: "https://taskflow-z40g.onrender.com/login",
+    role: "Full Stack Developer",
+    images: [TaskFlow1, TaskFlow2, TaskFlow3, TaskFlow4, TaskFlow5, TaskFlow6, TaskFlow7, TaskFlow8, TaskFlow9, TaskFlow10, TaskFlow11],
   },
   {
     name: "Voyair",

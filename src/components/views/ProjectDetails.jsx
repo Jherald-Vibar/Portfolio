@@ -9,13 +9,10 @@ import {
 
 export default function ProjectDetails({ project, onClose }) {
   const [activeImage, setActiveImage] = useState(0);
-
-  // Reset carousel to the first image whenever a new project is opened
   useEffect(() => {
     setActiveImage(0);
   }, [project]);
 
-  // Lock body scroll + keyboard nav (Esc to close, arrows to move through images)
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") onClose();
