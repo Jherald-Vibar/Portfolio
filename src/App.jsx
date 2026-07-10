@@ -708,7 +708,7 @@ export default function Home() {
             Send a message and I'll get back to you.
           </p>
 
-          
+          <a
             href="mailto:youremail@example.com"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-medium text-base md:text-lg mb-12 transition-transform duration-200 hover:-translate-y-0.5"
             style={{
