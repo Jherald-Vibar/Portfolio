@@ -49,7 +49,7 @@ const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
 const GITHUB_USERNAME = "Jherald-Vibar";
 
-function ExperienceStep({ exp, stepLevel, iconLevel, order, isLast }) {
+function ExperienceStep({ exp, iconLevel, order, isLast }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   const Icon = EXP_ICONS[iconLevel % EXP_ICONS.length];
@@ -73,9 +73,8 @@ function ExperienceStep({ exp, stepLevel, iconLevel, order, isLast }) {
   return (
     <div
       ref={ref}
-      className="exp-row relative flex flex-row-reverse items-start gap-6"
+      className="exp-row relative flex items-start gap-6"
       style={{
-        marginRight: `${stepLevel * 40}px`,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(18px)",
         transition: `opacity 0.6s ease ${order * 0.08}s, transform 0.6s ease ${order * 0.08}s`,
@@ -83,7 +82,7 @@ function ExperienceStep({ exp, stepLevel, iconLevel, order, isLast }) {
     >
       {!isLast && (
         <span
-          className="absolute right-[27px] top-[56px] w-[2px]"
+          className="absolute left-[27px] top-[56px] w-[2px]"
           style={{
             height: "calc(100% + 24px)",
             background: "linear-gradient(to bottom, rgba(79,142,247,0.35), rgba(79,142,247,0.02))",
@@ -408,14 +407,32 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="display glow-text text-5xl md:text-7xl font-bold leading-[1.08] mb-6">
+          <h1 className="display glow-text text-5xl md:text-6xl font-bold leading-[1.08] mb-6">
             <GameTypewriter text="JHERALD D. VIBAR" speed={150} />
           </h1>
 
-          <p className="text-white/50 text-lg md:text-xl max-w-xl leading-relaxed mb-10 font-light">
-            BS Information Technology, Magna Cum Laude. I build databases, web apps,
-            and mobile systems — from MS Access to Laravel to Flutter.
-          </p>
+          <div className="flex flex-col gap-4 max-w-xl mb-10">
+            <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+              I'm a full-stack developer with a BS in Information Technology, graduating
+              Magna Cum Laude. My path into development started earlier than most —
+              I began freelancing while still in college, taking on small database and
+              web projects for local clients to learn by shipping real work instead of
+              just coursework.
+            </p>
+            <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+              That freelance grind eventually led to me becoming{" "}
+              <span className="text-white/85 font-normal">Head Developer of our school organization</span>,
+              where I led a small team building internal tools, event platforms, and
+              systems used across campus — my first real taste of owning a codebase
+              beyond just my own projects.
+            </p>
+            <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+              Today I work across the whole stack: designing databases (MS Access, MySQL),
+              building backends and frontends (Laravel, React), and shipping mobile apps
+              with Flutter. I like being the person who can take a project from a blank
+              schema all the way to something people actually use.
+            </p>
+          </div>
 
           <div className="flex flex-wrap gap-4 mb-16">
             <a
@@ -596,14 +613,13 @@ export default function Home() {
             A path that started in college and kept climbing.
           </p>
 
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col">
             {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
               const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
               return (
                 <ExperienceStep
                   key={exp.year}
                   exp={exp}
-                  stepLevel={displayIndex}
                   iconLevel={chronoIndex}
                   order={displayIndex}
                   isLast={displayIndex === arr.length - 1}
