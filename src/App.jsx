@@ -49,10 +49,10 @@ const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
 const GITHUB_USERNAME = "Jherald-Vibar";
 
-function ExperienceStep({ exp, stepLevel, order, isLast }) {
+function ExperienceStep({ exp, stepLevel, iconLevel, order, isLast }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
-  const Icon = EXP_ICONS[stepLevel % EXP_ICONS.length];
+  const Icon = EXP_ICONS[iconLevel % EXP_ICONS.length];
 
   useEffect(() => {
     const node = ref.current;
@@ -73,9 +73,9 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
   return (
     <div
       ref={ref}
-      className="exp-row relative flex items-start gap-6"
+      className="exp-row relative flex flex-row-reverse items-start gap-6"
       style={{
-        marginLeft: `${stepLevel * 40}px`,
+        marginRight: `${stepLevel * 40}px`,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(18px)",
         transition: `opacity 0.6s ease ${order * 0.08}s, transform 0.6s ease ${order * 0.08}s`,
@@ -83,7 +83,7 @@ function ExperienceStep({ exp, stepLevel, order, isLast }) {
     >
       {!isLast && (
         <span
-          className="absolute left-[27px] top-[56px] w-[2px]"
+          className="absolute right-[27px] top-[56px] w-[2px]"
           style={{
             height: "calc(100% + 24px)",
             background: "linear-gradient(to bottom, rgba(79,142,247,0.35), rgba(79,142,247,0.02))",
@@ -596,14 +596,15 @@ export default function Home() {
             A path that started in college and kept climbing.
           </p>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col items-end">
             {[...EXPERIENCE].reverse().map((exp, displayIndex, arr) => {
               const chronoIndex = EXPERIENCE.length - 1 - displayIndex;
               return (
                 <ExperienceStep
                   key={exp.year}
                   exp={exp}
-                  stepLevel={chronoIndex}
+                  stepLevel={displayIndex}
+                  iconLevel={chronoIndex}
                   order={displayIndex}
                   isLast={displayIndex === arr.length - 1}
                 />
