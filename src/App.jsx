@@ -736,7 +736,7 @@ export default function Home() {
               boxShadow: "0 0 30px rgba(79,142,247,0.3)",
             }}
           >
-            <FaEnvelope /> youremail@example.com
+            <FaEnvelope /> vibar_jherald@spcc.edu.ph
           </a>
 
           <div className="flex items-center justify-center gap-4">
