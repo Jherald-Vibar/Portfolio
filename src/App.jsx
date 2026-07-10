@@ -4,7 +4,7 @@ import Footer from "./components/parts/Footer.jsx";
 import Profile from './assets/images/profile.jpg';
 import Profile2 from './assets/images/profile2.png';
 import Sibol1 from './assets/ProjectImages/Sibol/Sibol-1.png';
-import ProjectDetails from "./components/parts/ProjectDetails.jsx";
+import ProjectDetails from "./components/views/ProjectDetails.jsx";
 import {
   FaGithub, FaLinkedin, FaEnvelope, FaFileDownload,
   FaGraduationCap, FaBriefcase, FaCode, FaRocket, FaAward,
