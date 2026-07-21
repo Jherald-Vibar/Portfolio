@@ -554,7 +554,7 @@ export default function Home() {
               <FaGithub />
             </a>
             <a
-              href={`https://github.com/${GITHUB_USERNAME}`}
+              href="https://www.linkedin.com/in/jherald-vibar-319741285/"
               target="_blank"
               rel="noopener noreferrer"
               className="orbit-badge"
@@ -840,7 +840,7 @@ export default function Home() {
           </p>
 
           <a
-            href="mailto:youremail@example.com"
+            href="mailto:vibar_jherald@spcc.edu.ph"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-medium text-base md:text-lg mb-12 transition-transform duration-200 hover:-translate-y-0.5"
             style={{
               background: "linear-gradient(135deg, #3b77e3, #4f8ef7)",
@@ -861,7 +861,7 @@ export default function Home() {
               <FaGithub size={20} />
             </a>
             <a
-              href={`https://github.com/${GITHUB_USERNAME}`}
+              href="https://www.linkedin.com/in/jherald-vibar-319741285/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
