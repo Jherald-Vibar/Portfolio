@@ -51,6 +51,10 @@ const EXP_ICONS = [FaGraduationCap, FaCode, FaBriefcase, FaRocket, FaAward];
 
 const GITHUB_USERNAME = "Jherald-Vibar";
 
+// Categories available in the filter bar. Add more here if your project data
+// grows into other buckets (e.g. "desktop", "api").
+const PROJECT_CATEGORIES = ["all", "web", "mobile", "iot"];
+
 function ExperienceStep({ exp, iconLevel, order, isLast }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -131,6 +135,28 @@ function ExperienceStep({ exp, iconLevel, order, isLast }) {
   );
 }
 
+// Infers a project's category (web / mobile / iot) from an explicit
+// project.category field if present, otherwise guesses from tech/tags/text.
+// Falls back to "web" since that's the most common case.
+function inferCategory(project) {
+  if (project.category) return String(project.category).toLowerCase();
+
+  const tech = (project.tech ?? project.stack ?? project.tags ?? [])
+    .map((t) => String(t).toLowerCase());
+  const text = `${project.title ?? project.name ?? ""} ${project.summary ?? ""} ${project.description ?? project.desc ?? ""}`.toLowerCase();
+
+  const mobileHints = ["flutter", "react native", "android", "ios", "dart", "swift", "kotlin", "expo"];
+  const iotHints = ["arduino", "esp32", "esp8266", "raspberry pi", "iot", "sensor", "embedded", "microcontroller", "nodemcu"];
+
+  if (tech.some((t) => mobileHints.includes(t)) || mobileHints.some((h) => text.includes(h))) {
+    return "mobile";
+  }
+  if (tech.some((t) => iotHints.includes(t)) || iotHints.some((h) => text.includes(h))) {
+    return "iot";
+  }
+  return "web";
+}
+
 function normalizeProject(project, i) {
   const images =
     project.images ??
@@ -149,6 +175,7 @@ function normalizeProject(project, i) {
     liveUrl: project.link ?? project.demo ?? project.url ?? null,
     repoUrl: project.github ?? project.repo ?? project.source ?? null,
     stat: project.stat ?? null,
+    category: inferCategory(project),
   };
 }
 
@@ -173,6 +200,16 @@ function ProjectRow({ project, isOpen, onToggle, onViewDetails }) {
               {project.year}
             </span>
           )}
+          <span
+            className="hidden md:inline-block text-[10px] font-semibold uppercase tracking-wide shrink-0 px-2 py-0.5 rounded-full"
+            style={{
+              color: "#7eb8ff",
+              background: "rgba(79,142,247,0.12)",
+              fontFamily: "'Space Grotesk', sans-serif",
+            }}
+          >
+            {project.category}
+          </span>
         </div>
 
         <div className="flex items-center gap-6 shrink-0">
@@ -345,10 +382,15 @@ export default function Home() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [tapRevealed, setTapRevealed] = useState(false);
-  const [openProjectIndex, setOpenProjectIndex] = useState(null);
+  const [openProjectTitle, setOpenProjectTitle] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [booted, setBooted] = useState(false);
   const [resumeOpen, setResumeOpen] = useState(false);
+
+  // Project filtering + "view all" expansion
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const INITIAL_VISIBLE_PROJECTS = 4;
 
   useEffect(() => {
     const handleMove = (e) => {
@@ -357,6 +399,23 @@ export default function Home() {
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
   }, []);
+
+  const normalizedProjects = PROJECTS.map(normalizeProject);
+
+  const filteredProjects =
+    activeFilter === "all"
+      ? normalizedProjects
+      : normalizedProjects.filter((p) => p.category === activeFilter);
+
+  const visibleProjects = showAllProjects
+    ? filteredProjects
+    : filteredProjects.slice(0, INITIAL_VISIBLE_PROJECTS);
+
+  const handleFilterChange = (cat) => {
+    setActiveFilter(cat);
+    setShowAllProjects(false);
+    setOpenProjectTitle(null);
+  };
 
   return (
     <div className="relative isolate min-h-screen bg-[#09090f] text-white font-sans">
@@ -638,28 +697,80 @@ export default function Home() {
         className="relative px-8 md:px-20 py-20"
       >
         <div className="max-w-4xl mx-auto">
-          <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
-            Projects
-          </h2>
-          <p className="text-white/40 text-sm mb-10">
-            A few things I've built, end to end.
-          </p>
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
+            <div>
+              <h2 className="display text-2xl md:text-3xl font-bold text-white mb-1">
+                Projects
+              </h2>
+              <p className="text-white/40 text-sm">
+                A few things I've built, end to end.
+              </p>
+            </div>
+          </div>
 
-          <div className="proj-panel rounded-2xl px-6 md:px-10 mb-16 border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-            {PROJECTS.map((project, i) => {
-              const normalized = normalizeProject(project, i);
-              const isOpen = openProjectIndex === i;
+          {/* Category filter bar */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {PROJECT_CATEGORIES.map((cat) => {
+              const isActive = activeFilter === cat;
+              const count =
+                cat === "all"
+                  ? normalizedProjects.length
+                  : normalizedProjects.filter((p) => p.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => handleFilterChange(cat)}
+                  className="px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wide transition-all duration-200"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    background: isActive
+                      ? "linear-gradient(135deg, #3b77e3, #4f8ef7)"
+                      : "rgba(255,255,255,0.04)",
+                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.55)",
+                    border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)",
+                    boxShadow: isActive ? "0 0 16px rgba(79,142,247,0.3)" : "none",
+                  }}
+                >
+                  {cat} <span style={{ opacity: 0.6 }}>({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="proj-panel rounded-2xl px-6 md:px-10 mb-6 border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+            {visibleProjects.length === 0 && (
+              <p className="text-white/40 text-sm py-12 text-center">
+                No {activeFilter !== "all" ? activeFilter : ""} projects yet — check back soon.
+              </p>
+            )}
+            {visibleProjects.map((project) => {
+              const isOpen = openProjectTitle === project.title;
               return (
                 <ProjectRow
-                  key={normalized.title}
-                  project={normalized}
+                  key={project.title}
+                  project={project}
                   isOpen={isOpen}
-                  onToggle={() => setOpenProjectIndex(isOpen ? null : i)}
-                  onViewDetails={() => setSelectedProject(normalized)}
+                  onToggle={() => setOpenProjectTitle(isOpen ? null : project.title)}
+                  onViewDetails={() => setSelectedProject(project)}
                 />
               );
             })}
           </div>
+
+          {filteredProjects.length > INITIAL_VISIBLE_PROJECTS && (
+            <div className="flex justify-center mb-16">
+              <button
+                type="button"
+                onClick={() => setShowAllProjects((v) => !v)}
+                className="glass px-6 py-3 rounded-xl text-sm font-medium text-white/70 hover:text-white transition-all duration-200"
+              >
+                {showAllProjects
+                  ? "Show Less"
+                  : `View All Projects (${filteredProjects.length})`}
+              </button>
+            </div>
+          )}
 
           {/* GitHub activity — simple, professional, GitHub-green contribution graph */}
           <div className="github-panel rounded-2xl px-6 py-6 md:px-8 md:py-7">
