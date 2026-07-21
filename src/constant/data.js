@@ -29,7 +29,16 @@ import TaskFlow8 from '../assets/ProjectImages/TaskFlow/taskflow-8.png';
 import TaskFlow9 from '../assets/ProjectImages/TaskFlow/taskflow-9.png';
 import TaskFlow10 from '../assets/ProjectImages/TaskFlow/taskflow-10.png';
 import TaskFlow11 from '../assets/ProjectImages/TaskFlow/taskflow-11.png';
-
+import Voyair1 from '../assets/ProjectImages/Voyair/Voyair-1.png';
+import Voyair2 from '../assets/ProjectImages/Voyair/Voyair-2.png';
+import Voyair3 from '../assets/ProjectImages/Voyair/Voyair-3.png';
+import Voyair4 from '../assets/ProjectImages/Voyair/Voyair-4.png';
+import Voyair5 from '../assets/ProjectImages/Voyair/Voyair-5.png';
+import Voyair6 from '../assets/ProjectImages/Voyair/Voyair-6.png';
+import Voyair7 from '../assets/ProjectImages/Voyair/Voyair-7.png';
+import Voyair8 from '../assets/ProjectImages/Voyair/Voyair-8.png';
+import Voyair9 from '../assets/ProjectImages/Voyair/Voyair-9.png';
+import Voyair10 from '../assets/ProjectImages/Voyair/Voyair-10.png';
 
 export const SKILLS = [
   { label: "Laravel", icon: SiLaravel, color: "#FF2D20" },
@@ -66,6 +75,8 @@ export const PROJECTS = [
     name: "Voyair",
     desc: "Laravel-based flight booking web app with a polished navy/yellow design system.",
     tags: ["Laravel", "Alpine.js", "Tailwind"],
+    role: "Full Stack Developer",
+    images: [Voyair1, Voyair2, Voyair3, Voyair4, Voyair5, Voyair6, Voyair7, Voyair8, Voyair9, Voyair10],
   },
   {
     name: "Sentry",
